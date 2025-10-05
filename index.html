@@ -1,1553 +1,229 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>نظام إدارة شركة تنظيفات — تعبئة تلقائية لبيانات العميل</title>
-    <style>
-        body { background: url('superpro_bg.jpg') center top / cover no-repeat fixed; color:#fff; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin:0; }
-        .page-overlay { position: fixed; inset: 0; z-index: 0; background: linear-gradient(rgba(6,14,18,0.62), rgba(6,14,18,0.78)); pointer-events: none; }
-        .container{width:95%;margin:auto;padding:18px 20px; position:relative; z-index:1;}
-        header{background:#005180;padding:12px;border-radius:10px;text-align:center;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
-        h1{color:#ffcc00;margin:0;font-size:20px;}
-        .lang-switch{display:flex;gap:8px;align-items:center;}
-        .lang-btn{background:#063544;color:#fff;padding:6px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;}
-        .lang-btn.active{background:#ffcc00;color:#005180;border-color:transparent;}
-        .top-panels {display:flex;gap:12px;justify-content:flex-start;margin-bottom:12px;flex-wrap:wrap;}
-        .panel {background:#082a35;padding:12px;border-radius:8px;width:320px;}
-        .panel h3{color:#ffcc00;margin:0 0 8px 0;font-size:16px;}
-        .small-note{font-size:13px;color:#ccc;margin-bottom:8px;}
-        .nav-row{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap;}
-        .nav-btn {background:#34495e;color:#fff;padding:10px 16px;margin:0;border:none;border-radius:7px;cursor:pointer;}
-        .active {background:#ffcc00;color:#005180;}
-        .section {display:none;}
-        .form-group{margin-bottom:12px;}
-        label{display:block;margin-bottom:6px;color:#ffcc00;font-size:14px;}
-        input,select,textarea{width:100%;padding:8px;border:1px solid #3498db;border-radius:6px;background:#fff;color:#000;}
-        .form-btn{background:#ffcc00;color:#005180;padding:10px;width:100%;border:none;border-radius:6px;font-weight:bold;cursor:pointer;}
-        table{width:100%;border-collapse:collapse;margin-top:10px;}
-        th,td{border:1px solid #ddd;padding:8px;text-align:center;vertical-align:middle;color:#fff;}
-        th{background:#34495e;color:#fff;}
-        tr:nth-child(even){background:rgba(255,255,255,0.02);}
-        .btn-danger{background:#e74c3c;color:#fff;border:none;padding:6px 8px;border-radius:5px;cursor:pointer;}
-        .btn-edit{background:#27ae60;color:#fff;border:none;padding:6px 8px;border-radius:5px;cursor:pointer;}
-        .btn-export{background:#009688;color:#fff;padding:8px 12px;border:none;border-radius:6px;margin-bottom:10px;cursor:pointer;}
-        .map-link {color:#00e6ff;text-decoration:underline;}
-        .period-label {font-weight:bold;background:#182C3A;padding:6px;border-radius:4px;display:inline-block;}
-        .daily-contracts {background:#fff3cd;color:#2c3e50;padding:6px;border-radius:4px;margin-bottom:6px;}
-        .monthly-contracts {background:#d1ecf1;color:#2c3e50;padding:6px;border-radius:4px;margin-bottom:6px;}
-        .layout-flex {display:flex;gap:20px;align-items:flex-start;}
-        .main-area {flex:1;}
-        .sidebar {width:420px;background:#0e2b3a;padding:12px;border-radius:8px;overflow:auto;max-height:760px;}
-        .controls {display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap;}
-        .controls input[type="date"], .controls button, .controls select {padding:8px;border-radius:6px;border:1px solid #3498db;background:#063544;color:#fff;cursor:pointer;}
-        .muted {color:#ccc;font-size:13px;}
-        .inline {display:inline-block;margin-left:6px;}
-        #dailyScheduleTable th.client-name, #dailyScheduleTable td.client-name { min-width:230px; text-align:right; padding-right:12px; }
-        .cell-scroll { max-height:140px; overflow:auto; text-align:left; padding:6px; }
-        .small-btn {padding:4px 6px;font-size:12px;border-radius:4px;}
-        input, select, textarea, button { position: relative; z-index: 2; }
-        .contracts-subtabs {display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
-        .contracts-subtab {background:#063544;color:#fff;padding:8px;border-radius:6px;cursor:pointer;}
-        .contracts-subtab.active {background:#ffcc00;color:#005180;}
-        .contracts-box {background:#082a35;padding:12px;border-radius:8px;margin-bottom:10px;}
-        .two-cols {display:flex;gap:12px;}
-        .col {flex:1;}
-        .task-row {background:#112c33;padding:8px;border-radius:6px;margin-bottom:8px;color:#fff;}
-        .task-row input, .task-row select, .task-row textarea {width:100%;margin-bottom:6px;}
-        .task-actions {display:flex;gap:8px;justify-content:flex-end;}
-        @media (max-width:980px){ .sidebar{width:100%;} .layout-flex{flex-direction:column;} }
-        .weekday-row {display:flex;align-items:center;gap:8px;margin-bottom:6px;}
-        .weekday-row .day-name {width:80px;font-weight:bold;color:#ffcc00;}
-        .weekday-row label {color:#ccc; margin:0;}
-        .unavailable-worker { color: #e74c3c; font-style: italic; }
-        .form-row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
-        .form-field { flex: 1; min-width: 150px; }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>نظام إدارة SuperPro Cleaning & Services</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="page-overlay" aria-hidden="true"></div>
-    <div class="container">
-        <header>
-            <div style="text-align:left;">
-                <h1 id="appTitle">نظام إدارة شركة تنظيفات — تعبئة تلقائية لبيانات العميل</h1>
-            </div>
-            <div class="lang-switch" aria-hidden="false">
-                <button id="btnLangAr" class="lang-btn active" onclick="setLanguage('ar')">العربية</button>
-                <button id="btnLangEn" class="lang-btn" onclick="setLanguage('en')">English</button>
-            </div>
-        </header>
-        <div class="top-panels">
-            <div class="panel" id="topDailyPanel">
-                <h3 id="topDailyTitle">العقود اليومية (اليوم)</h3>
-                <div id="topDailyContent" class="small-note">جاري التحميل...</div>
-            </div>
-            <div class="panel" id="topMonthlyPanel">
-                <h3 id="topMonthlyTitle">العقود الشهرية (الشهر الحالي)</h3>
-                <div id="topMonthlyContent" class="small-note">جاري التحميل...</div>
-            </div>
+  <div class="page-overlay" aria-hidden="true"></div>
+  <div class="container">
+    <header class="topbar">
+      <div class="branding">
+        <img src="logo.png" alt="SuperPro Logo" class="logo" />
+        <div class="brand-text">
+          <div class="brand-name">SuperPro</div>
+          <div class="brand-sub">Cleaning & Services</div>
         </div>
-        <div class="nav-row">
-            <button class="nav-btn active" id="nav_clients" onclick="showSection('clientsSection')">العملاء</button>
-            <button class="nav-btn" id="nav_workers" onclick="showSection('workersSection')">الموظفات</button>
-            <button class="nav-btn" id="nav_contracts" onclick="showSection('contractsSection')">العقود</button>
-            <button class="nav-btn" id="nav_daily" onclick="showSection('dailyScheduleSection')">جدول الأعمال اليومية</button>
-            <button class="nav-btn" id="nav_weekly" onclick="showSection('weeklyTableSection')">خطة الأسبوع ومتابعة</button>
-            <button class="nav-btn" id="nav_export" onclick="exportAllDataExcel()">تصدير كامل البيانات (Excel)</button>
+      </div>
+      <nav class="top-nav">
+        <a id="nav_home" class="nav-link">الصفحة الرئيسية</a>
+        <button id="btnLogin" class="login-btn">تسجيل دخول</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="buttons-grid">
+          <button class="grid-btn" id="gotoClients"><span class="icon">👥</span><span class="label">إضافة عميل جديد</span></button>
+          <button class="grid-btn" id="gotoWorkers"><span class="icon">👩‍🔧</span><span class="label">إضافة موظفة جديدة</span></button>
+          <button class="grid-btn" id="gotoDailyTask"><span class="icon">✅</span><span class="label">إضافة مهمة يومية</span></button>
+
+          <button class="grid-btn" id="gotoContracts"><span class="icon">📄</span><span class="label">إضافة عقد يومي أو شهري</span></button>
+          <button class="grid-btn" id="gotoSchedule"><span class="icon">📅</span><span class="label">عرض جدول الأعمال</span></button>
+          <button class="grid-btn" id="exportExcel"><span class="icon">🗂️</span><span class="label">تصدير البيانات إلى Excel</span></button>
         </div>
-        <datalist id="clientList"></datalist>
-        <!-- باقي كود النظام بالكامل موجود كما في ملفك الأصلي -->
-        <!-- ... جميع الأقسام ... -->
-        <!-- ... جميع الجداول ... -->
-        <!-- ... جميع النماذج ... -->
-        <!-- ... جميع الأكواد ... -->
-        <!-- ... جميع السكريبتات ... -->
-<script>
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <title>نظام إدارة شركة تنظيفات — تعبئة تلقائية لبيانات العميل</title>
-    <style>
-        body { background: url('superpro_bg.jpg') center top / cover no-repeat fixed; color:#fff; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin:0; }
-        .page-overlay { position: fixed; inset: 0; z-index: 0; background: linear-gradient(rgba(6,14,18,0.62), rgba(6,14,18,0.78)); pointer-events: none; }
-        .container{width:95%;margin:auto;padding:18px 20px; position:relative; z-index:1;}
-        header{background:#005180;padding:12px;border-radius:10px;text-align:center;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
-        h1{color:#ffcc00;margin:0;font-size:20px;}
-        .lang-switch{display:flex;gap:8px;align-items:center;}
-        .lang-btn{background:#063544;color:#fff;padding:6px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;}
-        .lang-btn.active{background:#ffcc00;color:#005180;border-color:transparent;}
-        .top-panels {display:flex;gap:12px;justify-content:flex-start;margin-bottom:12px;flex-wrap:wrap;}
-        .panel {background:#082a35;padding:12px;border-radius:8px;width:320px;}
-        .panel h3{color:#ffcc00;margin:0 0 8px 0;font-size:16px;}
-        .small-note{font-size:13px;color:#ccc;margin-bottom:8px;}
-        .nav-row{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap;}
-        .nav-btn {background:#34495e;color:#fff;padding:10px 16px;margin:0;border:none;border-radius:7px;cursor:pointer;}
-        .active {background:#ffcc00;color:#005180;}
-        .section {display:none;}
-        .form-group{margin-bottom:12px;}
-        label{display:block;margin-bottom:6px;color:#ffcc00;font-size:14px;}
-        input,select,textarea{width:100%;padding:8px;border:1px solid #3498db;border-radius:6px;background:#fff;color:#000;}
-        .form-btn{background:#ffcc00;color:#005180;padding:10px;width:100%;border:none;border-radius:6px;font-weight:bold;cursor:pointer;}
-        table{width:100%;border-collapse:collapse;margin-top:10px;}
-        th,td{border:1px solid #ddd;padding:8px;text-align:center;vertical-align:middle;color:#fff;}
-        th{background:#34495e;color:#fff;}
-        tr:nth-child(even){background:rgba(255,255,255,0.02);}
-        .btn-danger{background:#e74c3c;color:#fff;border:none;padding:6px 8px;border-radius:5px;cursor:pointer;}
-        .btn-edit{background:#27ae60;color:#fff;border:none;padding:6px 8px;border-radius:5px;cursor:pointer;}
-        .btn-export{background:#009688;color:#fff;padding:8px 12px;border:none;border-radius:6px;margin-bottom:10px;cursor:pointer;}
-        .map-link {color:#00e6ff;text-decoration:underline;}
-        .period-label {font-weight:bold;background:#182C3A;padding:6px;border-radius:4px;display:inline-block;}
-        .daily-contracts {background:#fff3cd;color:#2c3e50;padding:6px;border-radius:4px;margin-bottom:6px;}
-        .monthly-contracts {background:#d1ecf1;color:#2c3e50;padding:6px;border-radius:4px;margin-bottom:6px;}
-        .layout-flex {display:flex;gap:20px;align-items:flex-start;}
-        .main-area {flex:1;}
-        .sidebar {width:420px;background:#0e2b3a;padding:12px;border-radius:8px;overflow:auto;max-height:760px;}
-        .controls {display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap;}
-        .controls input[type="date"], .controls button, .controls select {padding:8px;border-radius:6px;border:1px solid #3498db;background:#063544;color:#fff;cursor:pointer;}
-        .muted {color:#ccc;font-size:13px;}
-        .inline {display:inline-block;margin-left:6px;}
-        #dailyScheduleTable th.client-name, #dailyScheduleTable td.client-name { min-width:230px; text-align:right; padding-right:12px; }
-        .cell-scroll { max-height:140px; overflow:auto; text-align:left; padding:6px; }
-        .small-btn {padding:4px 6px;font-size:12px;border-radius:4px;}
-        input, select, textarea, button { position: relative; z-index: 2; }
-        .contracts-subtabs {display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
-        .contracts-subtab {background:#063544;color:#fff;padding:8px;border-radius:6px;cursor:pointer;}
-        .contracts-subtab.active {background:#ffcc00;color:#005180;}
-        .contracts-box {background:#082a35;padding:12px;border-radius:8px;margin-bottom:10px;}
-        .two-cols {display:flex;gap:12px;}
-        .col {flex:1;}
-        .task-row {background:#112c33;padding:8px;border-radius:6px;margin-bottom:8px;color:#fff;}
-        .task-row input, .task-row select, .task-row textarea {width:100%;margin-bottom:6px;}
-        .task-actions {display:flex;gap:8px;justify-content:flex-end;}
-        @media (max-width:980px){ .sidebar{width:100%;} .layout-flex{flex-direction:column;} }
-        .weekday-row {display:flex;align-items:center;gap:8px;margin-bottom:6px;}
-        .weekday-row .day-name {width:80px;font-weight:bold;color:#ffcc00;}
-        .weekday-row label {color:#ccc; margin:0;}
-        .unavailable-worker { color: #e74c3c; font-style: italic; }
-        .form-row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
-        .form-field { flex: 1; min-width: 150px; }
-    </style>
-</head>
-<body>
-    <div class="page-overlay" aria-hidden="true"></div>
-    <div class="container">
-        <header>
-            <div style="text-align:left;">
-                <h1 id="appTitle">نظام إدارة شركة تنظيفات — تعبئة تلقائية لبيانات العميل</h1>
-            </div>
+      </section>
 
-            <div class="lang-switch" aria-hidden="false">
-                <button id="btnLangAr" class="lang-btn active" onclick="setLanguage('ar')">العربية</button>
-                <button id="btnLangEn" class="lang-btn" onclick="setLanguage('en')">English</button>
-            </div>
-        </header>
+      <nav class="main-nav">
+        <button class="nav-btn active" data-section="clientsSection">العملاء</button>
+        <button class="nav-btn" data-section="workersSection">الموظفات</button>
+        <button class="nav-btn" data-section="contractsSection">العقود</button>
+        <button class="nav-btn" data-section="dailyScheduleSection">جدول الأعمال اليومية</button>
+        <button class="nav-btn" data-section="weeklyTableSection">خطة الأسبوع ومتابعة</button>
+      </nav>
 
-        <div class="top-panels">
-            <div class="panel" id="topDailyPanel">
-                <h3 id="topDailyTitle">العقود اليومية (اليوم)</h3>
-                <div id="topDailyContent" class="small-note">جاري التحميل...</div>
-            </div>
-            <div class="panel" id="topMonthlyPanel">
-                <h3 id="topMonthlyTitle">العقود الشهرية (الشهر الحالي)</h3>
-                <div id="topMonthlyContent" class="small-note">جاري التحميل...</div>
-            </div>
+      <!-- Sections (النصوص مأخوذة حرفياً من الكود الأصلي) -->
+      <section id="clientsSection" class="panel" style="display:block;">
+        <h2>إدارة العملاء</h2>
+        <form id="clientForm">
+          <div class="form-group"><label id="label_client_name">اسم العميل</label><input type="text" id="clientName"></div>
+          <div class="form-group"><label id="label_client_phone">رقم الجوال</label><input type="tel" id="clientPhone"></div>
+          <div class="form-group"><label id="label_client_area">المنطقة</label><input type="text" id="clientArea"></div>
+          <div class="form-group"><label id="label_client_map">رابط المنطقة (Google Maps)</label><input type="url" id="clientMapUrl" placeholder="https://maps.google.com/..."></div>
+          <button type="submit" class="form-btn" id="btnAddClient">إضافة عميل</button>
+        </form>
+        <button class="btn-export" id="btnExportClients">تصدير العملاء إلى Excel</button>
+        <table id="clientsTable" class="data-table"><thead><tr><th id="th_client_name">الاسم</th><th id="th_client_phone">الجوال</th><th id="th_client_area">المنطقة</th><th id="th_client_map">رابط المنطقة</th><th id="th_client_actions">إجراءات</th></tr></thead><tbody></tbody></table>
+      </section>
+
+      <section id="workersSection" class="panel" style="display:none;">
+        <h2>إدارة الموظفات</h2>
+        <form id="workerForm">
+          <div class="form-group"><label id="label_worker_name">اسم الموظفة</label><input type="text" id="workerName"></div>
+          <div class="form-group"><label id="label_worker_phone">رقم الجوال</label><input type="tel" id="workerPhone"></div>
+          <div class="form-group"><label id="label_worker_nat">الجنسية</label><input type="text" id="workerNationality"></div>
+          <button type="submit" class="form-btn" id="btnAddWorker">إضافة موظفة</button>
+        </form>
+        <button class="btn-export" id="btnExportWorkers">تصدير الموظفات إلى Excel</button>
+        <table id="workersTable" class="data-table"><thead><tr><th id="th_worker_name">الاسم</th><th id="th_worker_phone">الجوال</th><th id="th_worker_nat">الجنسية</th><th id="th_worker_actions">إجراءات</th></tr></thead><tbody></tbody></table>
+      </section>
+
+      <section id="contractsSection" class="panel" style="display:none;">
+        <h2>إدارة العقود (يومي - شهري)</h2>
+
+        <div class="contracts-subtabs">
+          <div class="contracts-subtab active" id="tab_all" onclick="switchContractTab('all')">عرض الكل</div>
+          <div class="contracts-subtab" id="tab_daily" onclick="switchContractTab('daily')">نموذج يومي</div>
+          <div class="contracts-subtab" id="tab_monthly" onclick="switchContractTab('monthly')">نموذج شهري</div>
         </div>
 
-        <div class="nav-row">
-            <button class="nav-btn active" id="nav_clients" onclick="showSection('clientsSection')">العملاء</button>
-            <button class="nav-btn" id="nav_workers" onclick="showSection('workersSection')">الموظفات</button>
-            <button class="nav-btn" id="nav_contracts" onclick="showSection('contractsSection')">العقود</button>
-            <button class="nav-btn" id="nav_daily" onclick="showSection('dailyScheduleSection')">جدول الأعمال اليومية</button>
-            <button class="nav-btn" id="nav_weekly" onclick="showSection('weeklyTableSection')">خطة الأسبوع ومتابعة</button>
-            <button class="nav-btn" id="nav_export" onclick="exportAllDataExcel()">تصدير كامل البيانات (Excel)</button>
+        <div id="contractsAllContainer" class="contracts-box">
+          <h3>جميع العقود</h3>
+          <button class="btn-export" id="btnExportContracts">تصدير العقود إلى Excel</button>
+          <table id="contractsTableAll" class="data-table"><thead><tr><th id="th_contract_type">نوع</th><th id="th_contract_client">العميل</th><th id="th_contract_phone">جوال</th><th id="th_contract_area">المنطقة</th><th id="th_contract_map">رابط</th><th id="th_contract_worker">الموظفة</th><th id="th_contract_period">الفترة</th><th id="th_contract_start">بداية</th><th id="th_contract_end">نهاية</th><th id="th_contract_value">قيمة</th><th id="th_contract_payment">حالة الدفع</th><th id="th_contract_notes">ملاحظات</th><th id="th_contract_actions">إجراءات</th></tr></thead><tbody></tbody></table>
         </div>
 
-        <!-- datalist for client name autocomplete (used by manual entry and others) -->
-        <datalist id="clientList"></datalist>
-
-        <!-- CLIENTS -->
-        <div class="section" id="clientsSection" style="display:block;">
-            <h2 id="clientsHeading">إدارة العملاء</h2>
-            <form id="clientForm">
-                <div class="form-group"><label id="label_client_name">اسم العميل</label><input type="text" id="clientName"></div>
-                <div class="form-group"><label id="label_client_phone">رقم الجوال</label><input type="tel" id="clientPhone"></div>
-                <div class="form-group"><label id="label_client_area">المنطقة</label><input type="text" id="clientArea"></div>
-                <div class="form-group"><label id="label_client_map">رابط المنطقة (Google Maps)</label><input type="url" id="clientMapUrl" placeholder="https://maps.google.com/..."></div>
-                <button type="submit" class="form-btn" id="btnAddClient">إضافة عميل</button>
-            </form>
-            <button class="btn-export" id="btnExportClients" onclick="exportClientsToExcel()">تصدير العملاء إلى Excel</button>
-            <table id="clientsTable"><thead><tr><th id="th_client_name">الاسم</th><th id="th_client_phone">الجوال</th><th id="th_client_area">المنطقة</th><th id="th_client_map">رابط المنطقة</th><th id="th_client_actions">إجراءات</th></tr></thead><tbody></tbody></table>
+        <div id="form_daily" style="display:none;" class="contracts-box">
+          <h3>إضافة / تعديل عقد يومي</h3>
+          <form id="dailyContractForm">
+            <input type="hidden" id="editDailyIndex" value="-1">
+            <div class="two-cols">
+              <div class="col">
+                <div class="form-group"><label>العميل</label><input id="daily_contractClient" list="clientList" placeholder="اكتب اسم العميل أو اختر من القائمة"></div>
+                <div class="form-group"><label>جوال العميل</label><input type="tel" id="daily_contractClientPhone"></div>
+                <div class="form-group"><label>المنطقة</label><input type="text" id="daily_contractClientArea"></div>
+                <div class="form-group"><label>رابط المنطقة</label><input type="url" id="daily_contractClientMap"></div>
+              </div>
+              <div class="col">
+                <div class="form-group"><label>الموظفة</label><select id="daily_contractWorker"></select></div>
+                <div class="form-group"><label>نطاق العقد (حدد أيام الأسبوع وفترات الصباحية/المسائية لكل يوم)</label><div id="daily_weekdays_grid"></div></div>
+                <div class="form-group"><label>تاريخ البداية</label><input type="date" id="daily_contractStart"></div>
+                <div class="form-group"><label>تاريخ النهاية (اختياري — اترك فارغًا إن كان غير منتهي)</label><input type="date" id="daily_contractEnd"></div>
+              </div>
+            </div>
+            <div class="form-group"><label>قيمة العقد</label><input type="number" id="daily_contractValue"></div>
+            <div class="form-group"><label>حالة الدفع</label><select id="daily_contractPayment"><option value="كاش">كاش</option><option value="أون لاين">أون لاين</option><option value="الدوبي كاش">الدوبي كاش</option><option value="الدوبي أون لاين">الدوبي أون لاين</option><option value="غير مدفوع">غير مدفوع</option><option value="مدفوع جزئي">مدفوع جزئي</option></select></div>
+            <div class="form-group"><label>ملاحظات</label><textarea id="daily_contractNotes"></textarea></div>
+            <div class="form-actions"><button class="form-btn" id="btnSaveDaily">حفظ عقد يومي</button><button class="form-btn cancel" id="btnCancelDaily">إلغاء</button></div>
+          </form>
         </div>
 
-        <!-- WORKERS -->
-        <div class="section" id="workersSection">
-            <h2 id="workersHeading">إدارة الموظفات</h2>
-            <form id="workerForm">
-                <div class="form-group"><label id="label_worker_name">اسم الموظفة</label><input type="text" id="workerName"></div>
-                <div class="form-group"><label id="label_worker_phone">رقم الجوال</label><input type="tel" id="workerPhone"></div>
-                <div class="form-group"><label id="label_worker_nat">الجنسية</label><input type="text" id="workerNationality"></div>
-                <button type="submit" class="form-btn" id="btnAddWorker">إضافة موظفة</button>
-            </form>
-            <button class="btn-export" id="btnExportWorkers" onclick="exportWorkersToExcel()">تصدير الموظفات إلى Excel</button>
-            <table id="workersTable"><thead><tr><th id="th_worker_name">الاسم</th><th id="th_worker_phone">الجوال</th><th id="th_worker_nat">الجنسية</th><th id="th_worker_actions">إجراءات</th></tr></thead><tbody></tbody></table>
+        <div id="form_monthly" style="display:none;" class="contracts-box">
+          <h3>إضافة / تعديل عقد شهري</h3>
+          <form id="monthlyContractForm">
+            <input type="hidden" id="editMonthlyIndex" value="-1">
+            <div class="two-cols">
+              <div class="col">
+                <div class="form-group"><label>العميل</label><input id="monthly_contractClient" list="clientList" placeholder="اكتب اسم العميل أو اختر من القائمة"></div>
+                <div class="form-group"><label>جوال العميل</label><input type="tel" id="monthly_contractClientPhone"></div>
+                <div class="form-group"><label>المنطقة</label><input type="text" id="monthly_contractClientArea"></div>
+                <div class="form-group"><label>رابط المنطقة</label><input type="url" id="monthly_contractClientMap"></div>
+              </div>
+              <div class="col">
+                <div class="form-group"><label>الموظفة</label><select id="monthly_contractWorker"></select></div>
+                <div class="form-group"><label>الفترة</label><select id="monthly_contractPeriod"><option value="الكل">الكل</option><option value="الصباحية">الصباحية</option><option value="المسائية">المسائية</option></select></div>
+                <div class="form-group"><label>تاريخ البداية</label><input type="date" id="monthly_contractStart"></div>
+                <div class="form-group"><label>تاريخ النهاية</label><input type="date" id="monthly_contractEnd"></div>
+              </div>
+            </div>
+            <div class="form-group"><label>قيمة العقد</label><input type="number" id="monthly_contractValue"></div>
+            <div class="form-group"><label>حالة الدفع</label><select id="monthly_contractPayment"><option value="كاش">كاش</option><option value="أون لاين">أون لاين</option><option value="الدوبي كاش">الدوبي كاش</option><option value="الدوبي أون لاين">الدوبي أون لاين</option><option value="غير مدفوع">غير مدفوع</option><option value="مدفوع جزئي">مدفوع جزئي</option></select></div>
+            <div class="form-group"><label>ملاحظات</label><textarea id="monthly_contractNotes"></textarea></div>
+            <div class="form-actions"><button class="form-btn" id="btnSaveMonthly">حفظ عقد شهري</button><button class="form-btn cancel" id="btnCancelMonthly">إلغاء</button></div>
+          </form>
         </div>
+      </section>
 
-        <!-- CONTRACTS -->
-        <div class="section" id="contractsSection">
-            <h2 id="contractsHeading">إدارة العقود (يومي - شهري)</h2>
-
-            <div class="contracts-subtabs">
-                <div class="contracts-subtab active" id="tab_all" onclick="switchContractTab('all')" data-i18n="tab_all">عرض الكل</div>
-                <div class="contracts-subtab" id="tab_daily" onclick="switchContractTab('daily')" data-i18n="tab_daily">نموذج يومي</div>
-                <div class="contracts-subtab" id="tab_monthly" onclick="switchContractTab('monthly')" data-i18n="tab_monthly">نموذج شهري</div>
+      <section id="dailyScheduleSection" class="panel" style="display:none;">
+        <h2>جدول الأعمال اليومية</h2>
+        <div class="layout-flex">
+          <div class="main-area">
+            <div class="controls">
+              <label class="small-note">اختر التاريخ:</label>
+              <input type="date" id="dailyDate" />
+              <label class="small-note">اختر الموظفة:</label>
+              <select id="dailyWorker"></select>
+              <label class="small-note">عرض حسب الفترة:</label>
+              <select id="dailyPeriodFilter"><option value="الكل">الكل</option><option value="الصباحية">الصباحية</option><option value="المسائية">المسائية</option></select>
+              <button class="btn-export" id="btnRenderDaily">عرض</button>
             </div>
 
-            <div class="contracts-box" id="contractsForms">
-                <!-- Daily form (client field: input[list]; added weekdays selection with periods per day) -->
-                <div id="form_daily" style="display:none;">
-                    <h3 id="dailyFormTitle">إضافة / تعديل عقد يومي</h3>
-                    <form id="dailyContractForm">
-                        <input type="hidden" id="editDailyIndex" value="-1">
-                        <div class="two-cols">
-                            <div class="col">
-                                <div class="form-group"><label data-i18n="label_client">العميل</label>
-                                    <input id="daily_contractClient" list="clientList" oninput="populateClientDetailsInContract('daily')" placeholder="اكتب اسم العميل أو اختر من القائمة">
-                                </div>
-                                <div class="form-group"><label data-i18n="label_phone">جوال العميل</label><input type="tel" id="daily_contractClientPhone"></div>
-                                <div class="form-group"><label data-i18n="label_area">المنطقة</label><input type="text" id="daily_contractClientArea"></div>
-                                <div class="form-group"><label data-i18n="label_map">رابط المنطقة</label><input type="url" id="daily_contractClientMap"></div>
-                            </div>
-                            <div class="col">
-                                <div class="form-group"><label data-i18n="label_worker">الموظفة</label><select id="daily_contractWorker"></select></div>
-                                <!-- Removed single period field; replaced by per-weekday periods below -->
-                                <div class="form-group"><label>نطاق العقد (حدد أيام الأسبوع وفترات الصباحية/المسائية لكل يوم)</label>
-                                    <div id="daily_weekdays_grid">
-                                        <!-- will be populated by JS -->
-                                    </div>
-                                    <div class="muted" style="margin-top:6px;">حدد الصباحية أو المسائية أو كليهما لكل يوم. إذا لم تُحدد أي يوم فسيعامل العقد كتاريخ فردي يعتمد على تاريخ البداية. يمكن أن يبقى عقد يومي بدون تاريخ نهاية (غير منتهي).</div>
-                                </div>
-                                <div class="form-group"><label data-i18n="label_start">تاريخ البداية</label><input type="date" id="daily_contractStart"></div>
-                                <div class="form-group"><label data-i18n="label_end">تاريخ النهاية (اختياري — اترك فارغًا إن كان غير منتهي)</label><input type="date" id="daily_contractEnd"></div>
-                            </div>
-                        </div>
-
-                        <div class="form-group"><label data-i18n="label_value">قيمة العقد</label><input type="number" id="daily_contractValue"></div>
-                        <div class="form-group"><label data-i18n="label_payment">حالة الدفع</label><select id="daily_contractPayment"><option value="كاش">كاش</option><option value="أون لاين">أون لاين</option><option value="الدوبي كاش">الدوبي كاش</option><option value="الدوبي أون لاين">الدوبي أون لاين</option><option value="غير مدفوع">غير مدفوع</option><option value="مدفوع جزئي">مدفوع جزئي</option></select></div>
-                        <div class="form-group"><label data-i18n="label_notes">ملاحظات</label><textarea id="daily_contractNotes"></textarea></div>
-                        <div style="display:flex;gap:10px;">
-                            <button type="submit" class="form-btn" id="btnSaveDaily">حفظ عقد يومي</button>
-                            <button type="button" class="form-btn" style="background:#666;" onclick="cancelDailyEdit()" id="btnCancelDaily">إلغاء</button>
-                        </div>
-                    </form>
+            <div class="manual-entry">
+              <h3>أضف إدخال / مهمة (يدوي أو خطة)</h3>
+              <form id="manualEntryForm">
+                <input type="hidden" id="manualEditingType" value="">
+                <input type="hidden" id="manualEditingIndex" value="-1">
+                <div class="form-row">
+                  <div class="form-field"><label>التاريخ</label><input type="date" id="manualDate"></div>
+                  <div class="form-field"><label>اسم العميل</label><input type="text" id="manualClient" list="clientList"></div>
+                  <div class="form-field"><label>رقم الجوال</label><input type="text" id="manualPhone"></div>
                 </div>
-
-                <!-- Monthly form unchanged (client input[list]) -->
-                <div id="form_monthly" style="display:none;">
-                    <h3 id="monthlyFormTitle">إضافة / تعديل عقد شهري</h3>
-                    <form id="monthlyContractForm">
-                        <input type="hidden" id="editMonthlyIndex" value="-1">
-                        <div class="two-cols">
-                            <div class="col">
-                                <div class="form-group"><label data-i18n="label_client">العميل</label>
-                                    <input id="monthly_contractClient" list="clientList" oninput="populateClientDetailsInContract('monthly')" placeholder="اكتب اسم العميل أو اختر من القائمة">
-                                </div>
-                                <div class="form-group"><label data-i18n="label_phone">جوال العميل</label><input type="tel" id="monthly_contractClientPhone"></div>
-                                <div class="form-group"><label data-i18n="label_area">المنطقة</label><input type="text" id="monthly_contractClientArea"></div>
-                                <div class="form-group"><label data-i18n="label_map">رابط المنطقة</label><input type="url" id="monthly_contractClientMap"></div>
-                            </div>
-                            <div class="col">
-                                <div class="form-group"><label data-i18n="label_worker">الموظفة</label><select id="monthly_contractWorker"></select></div>
-                                <div class="form-group"><label data-i18n="label_period">الفترة</label><select id="monthly_contractPeriod"><option value="الكل">الكل</option><option value="الصباحية">الصباحية</option><option value="المسائية">المسائية</option></select></div>
-                                <div class="form-group"><label data-i18n="label_start">تاريخ البداية</label><input type="date" id="monthly_contractStart"></div>
-                                <div class="form-group"><label data-i18n="label_end">تاريخ النهاية</label><input type="date" id="monthly_contractEnd"></div>
-                            </div>
-                        </div>
-                        <div class="form-group"><label data-i18n="label_value">قيمة العقد</label><input type="number" id="monthly_contractValue"></div>
-                        <div class="form-group"><label data-i18n="label_payment">حالة الدفع</label><select id="monthly_contractPayment"><option value="كاش">كاش</option><option value="أون لاين">أون لاين</option><option value="الدوبي كاش">الدوبي كاش</option><option value="الدوبي أون لاين">الدوبي أون لاين</option><option value="غير مدفوع">غير مدفوع</option><option value="مدفوع جزئي">مدفوع جزئي</option></select></div>
-                        <div class="form-group"><label data-i18n="label_notes">ملاحظات</label><textarea id="monthly_contractNotes"></textarea></div>
-                        <div style="display:flex;gap:10px;">
-                            <button type="submit" class="form-btn" id="btnSaveMonthly">حفظ عقد شهري</button>
-                            <button type="button" class="form-btn" style="background:#666;" onclick="cancelMonthlyEdit()" id="btnCancelMonthly">إلغاء</button>
-                        </div>
-                    </form>
+                <div class="form-row">
+                  <div class="form-field"><label>المنطقة</label><input type="text" id="manualArea"></div>
+                  <div class="form-field"><label>رابط المنطقة</label><input type="url" id="manualMap"></div>
+                  <div class="form-field"><label>الفترة</label><select id="manualPeriod"><option value="الصباحية">الصباحية</option><option value="المسائية">المسائية</option><option value="الكل">الكل</option></select></div>
                 </div>
+                <div class="form-row">
+                  <div class="form-field"><label>اسم العاملة</label><select id="manualWorker"></select></div>
+                  <div class="form-field"><label>اسم السائق</label><input type="text" id="manualDriver"></div>
+                  <div class="form-field"><label>عدد الساعات</label><input type="number" id="manualHours"></div>
+                </div>
+                <div class="form-row">
+                  <div class="form-field"><label>المبلغ</label><input type="number" id="manualAmount"></div>
+                  <div class="form-field"><label>حالة الدفع</label><select id="manualPaymentStatus"><option value="مدفوع">مدفوع</option><option value="غير مدفوع">غير مدفوع</option></select></div>
+                  <div class="form-field"><label>طريقة الدفع</label><select id="manualPaymentMethod"><option value="">--طريقة الدفع--</option><option value="كاش">كاش</option><option value="أون لاين">أون لاين</option><option value="الدوبي كاش">الدوبي كاش</option><option value="الدوبي أون لاين">الدوبي أون لاين</option></select></div>
+                </div>
+                <div class="form-row">
+                  <div class="form-field" style="flex:3;"><label>ملاحظات</label><input type="text" id="manualNotes"></div>
+                  <div class="form-field" style="flex:1;display:flex;align-items:flex-end;"><button class="form-btn" type="submit">احفظ المهمة</button></div>
+                </div>
+              </form>
+              <div class="muted" id="manualNoteText">عند كتابة اسم العميل مُطابقًا لاسم موجود في صفحة "العملاء" سيقوم النظام بملء الجوال والمنطقة والرابط تلقائيًا.</div>
             </div>
 
-            <div class="contracts-box" id="contractsAllContainer">
-                <h3 id="allContractsTitle">جميع العقود</h3>
-                <button class="btn-export" id="btnExportContracts" onclick="exportContractsToExcel()">تصدير العقود إلى Excel</button>
-                <table id="contractsTableAll">
-                    <thead><tr><th id="th_contract_type">نوع</th><th id="th_contract_client">العميل</th><th id="th_contract_phone">جوال</th><th id="th_contract_area">المنطقة</th><th id="th_contract_map">رابط</th><th id="th_contract_worker">الموظفة</th><th id="th_contract_period">الفترة</th><th id="th_contract_start">بداية</th><th id="th_contract_end">نهاية</th><th id="th_contract_value">قيمة</th><th id="th_contract_payment">حالة الدفع</th><th id="th_contract_notes">ملاحظات</th><th id="th_contract_actions">إجراءات</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
+            <table id="dailyScheduleTable" class="data-table"><thead><tr><th id="th_ds_date">التاريخ</th><th class="client-name" id="th_ds_client">اسم العميل</th><th id="th_ds_worker">اسم العاملة</th><th id="th_ds_period">الفترة</th><th id="th_ds_phone">رقم الجوال</th><th id="th_ds_area">المنطقة</th><th id="th_ds_driver">سائق</th><th id="th_ds_amount">المبلغ</th><th id="th_ds_status">حالة الدفع</th><th id="th_ds_method">طريقة الدفع</th><th id="th_ds_hours">عدد الساعات</th><th id="th_ds_notes">ملاحظات</th><th id="th_ds_source">مصدر</th><th id="th_ds_actions">إجراءات</th></tr></thead><tbody></tbody></table>
+          </div>
 
-            <div id="contractsDailyContainer" class="contracts-box" style="display:none;">
-                <h3 id="dailyContractsTitle">العقود اليومية</h3>
-                <table id="contractsDailyTable"><thead><tr><th id="th_d_client">العميل</th><th id="th_d_phone">جوال</th><th id="th_d_area">المنطقة</th><th id="th_d_map">رابط</th><th id="th_d_worker">الموظفة</th><th id="th_d_period">الفرة</th><th id="th_d_start">بداية</th><th id="th_d_end">نهاية</th><th id="th_d_value">قيمة</th><th id="th_d_payment">حالة الدفع</th><th id="th_d_notes">ملاحظات</th><th id="th_d_actions">إجراءات</th></tr></thead><tbody></tbody></table>
-            </div>
-
-            <div id="contractsMonthlyContainer" class="contracts-box" style="display:none;">
-                <h3 id="monthlyContractsTitle">العقود الشهرية</h3>
-                <table id="contractsMonthlyTable"><thead><tr><th>العميل</th><th>جوال</th><th>المنطقة</th><th>رابط</th><th>الموظفة</th><th>الفترة</th><th>بداية</th><th>نهاية</th><th>قيمة</th><th>حالة الدفع</th><th>ملاحظات</th><th>إجراءات</th></tr></thead><tbody></tbody></table>
-            </div>
+          <aside class="sidebar">
+            <h3 id="sidebar_dailyContracts_title">العقود اليومية (التاريخ المحدد)</h3>
+            <div id="dailyContractsPanel" class="small-note">لا توجد عقود يومية.</div>
+            <h3 id="sidebar_monthlyContracts_title">العقود الشهرية (التاريخ المحدد)</h3>
+            <div id="monthlyContractsPanel" class="small-note">لا توجد عقود شهرية.</div>
+          </aside>
         </div>
+      </section>
 
-        <!-- DAILY SCHEDULE -->
-        <div class="section" id="dailyScheduleSection">
-            <h2 id="dailyHeading">جدول الأعمال اليومية</h2>
-            <div class="layout-flex">
-                <div class="main-area">
-                    <div class="controls">
-                        <label class="small-note" id="label_choose_date">اختر التاريخ:</label>
-                        <input type="date" id="dailyDate" value="">
-                        <label class="small-note" id="label_choose_worker">اختر الموظفة:</label>
-                        <select id="dailyWorker"></select>
-                        <label class="small-note" id="label_choose_period">عرض حسب الفترة:</label>
-                        <select id="dailyPeriodFilter"><option value="الكل">الكل</option><option value="الصباحية">الصباحية</option><option value="المسائية">المسائية</option></select>
-                        <button class="btn-export" id="btnRenderDaily" onclick="renderDailySchedule()">عرض</button>
-                    </div>
-
-                    <div style="background:#0b3340;padding:10px;border-radius:8px;margin-bottom:10px;">
-                        <h3 style="margin:0 0 8px 0;color:#ffcc00;" id="manualEntryTitle">أضف إدخال / مهمة (يدوي أو خطة)</h3>
-                        <form id="manualEntryForm" onsubmit="addManualEntry(event)">
-                            <input type="hidden" id="manualEditingType" value="">
-                            <input type="hidden" id="manualEditingIndex" value="-1">
-                            
-                            <!-- الصف الأول: التاريخ، اسم العميل، رقم الجوال -->
-                            <div class="form-row">
-                                <div class="form-field">
-                                    <label>التاريخ</label>
-                                    <input type="date" id="manualDate" onchange="updateManualWorkerAvailability()">
-                                </div>
-                                <div class="form-field">
-                                    <label>اسم العميل</label>
-                                    <input type="text" id="manualClient" list="clientList" placeholder="اسم العميل" oninput="tryAutoFillManualClient()">
-                                </div>
-                                <div class="form-field">
-                                    <label>رقم الجوال</label>
-                                    <input type="text" id="manualPhone" placeholder="رقم الجوال">
-                                </div>
-                            </div>
-                            
-                            <!-- الصف الثاني: المنطقة، رابط المنطقة، الفترة -->
-                            <div class="form-row">
-                                <div class="form-field">
-                                    <label>المنطقة</label>
-                                    <input type="text" id="manualArea" placeholder="المنطقة">
-                                </div>
-                                <div class="form-field">
-                                    <label>رابط المنطقة</label>
-                                    <input type="url" id="manualMap" placeholder="رابط المنطقة">
-                                </div>
-                                <div class="form-field">
-                                    <label>الفترة</label>
-                                    <select id="manualPeriod" onchange="updateManualWorkerAvailability()">
-                                        <option value="الصباحية">الصباحية</option>
-                                        <option value="المسائية">المسائية</option>
-                                        <option value="الكل">الكل</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <!-- الصف الثالث: اسم العاملة، اسم السائق، عدد الساعات -->
-                            <div class="form-row">
-                                <div class="form-field">
-                                    <label>اسم العاملة</label>
-                                    <select id="manualWorker"></select>
-                                </div>
-                                <div class="form-field">
-                                    <label>اسم السائق</label>
-                                    <input type="text" id="manualDriver" placeholder="اسم السائق">
-                                </div>
-                                <div class="form-field">
-                                    <label>عدد الساعات</label>
-                                    <input type="number" id="manualHours" placeholder="عدد الساعات">
-                                </div>
-                            </div>
-                            
-                            <!-- الصف الرابع: المبلغ، حالة الدفع، طريقة الدفع -->
-                            <div class="form-row">
-                                <div class="form-field">
-                                    <label>المبلغ</label>
-                                    <input type="number" id="manualAmount" placeholder="المبلغ">
-                                </div>
-                                <div class="form-field">
-                                    <label>حالة الدفع</label>
-                                    <select id="manualPaymentStatus">
-                                        <option value="مدفوع">مدفوع</option>
-                                        <option value="غير مدفوع">غير مدفوع</option>
-                                    </select>
-                                </div>
-                                <div class="form-field">
-                                    <label>طريقة الدفع</label>
-                                    <select id="manualPaymentMethod">
-                                        <option value="">--طريقة الدفع--</option>
-                                        <option value="كاش">كاش</option>
-                                        <option value="أون لاين">أون لاين</option>
-                                        <option value="الدوبي كاش">الدوبي كاش</option>
-                                        <option value="الدوبي أون لاين">الدوبي أون لاين</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <!-- الصف الخامس: الملاحظات -->
-                            <div class="form-row">
-                                <div class="form-field" style="flex: 3;">
-                                    <label>ملاحظات</label>
-                                    <input type="text" id="manualNotes" placeholder="ملاحظات (اختياري)">
-                                </div>
-                                <div class="form-field" style="flex: 1; display: flex; align-items: flex-end;">
-                                    <button class="form-btn" type="submit" style="width:100%;">احفظ المهمة</button>
-                                </div>
-                            </div>
-                        </form>
-                        <div class="muted" style="margin-top:6px;" id="manualNoteText">عند كتابة اسم العميل مُطابقًا لاسم موجود في صفحة "العملاء" سيقوم النظام بملء الجوال والمنطقة والرابط تلقائيًا.</div>
-                    </div>
-
-                    <table id="dailyScheduleTable"><thead><tr><th id="th_ds_date">التاريخ</th><th class="client-name" id="th_ds_client">اسم العميل</th><th id="th_ds_worker">اسم العاملة</th><th id="th_ds_period">الفترة</th><th id="th_ds_phone">رقم الجوال</th><th id="th_ds_area">المنطقة</th><th id="th_ds_driver">سائق</th><th id="th_ds_amount">المبلغ</th><th id="th_ds_status">حالة الدفع</th><th id="th_ds_method">طريقة الدفع</th><th id="th_ds_hours">عدد الساعات</th><th id="th_ds_notes">ملاحظات</th><th id="th_ds_source">مصدر</th><th id="th_ds_actions">إجراءات</th></tr></thead><tbody></tbody></table>
-                </div>
-
-                <div class="sidebar">
-                    <h3 id="sidebar_dailyContracts_title">العقود اليومية (التاريخ المحدد)</h3>
-                    <div id="dailyContractsPanel" class="small-note">لا توجد عقود يومية.</div>
-                    <h3 style="margin-top:12px;" id="sidebar_monthlyContracts_title">العقود الشهرية (التاريخ المحدد)</h3>
-                    <div id="monthlyContractsPanel" class="small-note">لا توجد عقود شهرية.</div>
-                </div>
+      <section id="weeklyTableSection" class="panel" style="display:none;">
+        <h2>خطة الأسبوع ومتابعة الأعمال</h2>
+        <div class="layout-flex">
+          <div class="main-area">
+            <div class="controls">
+              <button class="btn-export" id="btnPrevWeek">الأسبوع السابق</button>
+              <input type="date" id="weekDate" />
+              <button class="btn-export" id="btnNextWeek">الأسبوع التالي</button>
+              <button class="btn-export" id="btnRenderWeek">عرض الأسبوع</button>
+              <button class="btn-export" id="btnGeneratePlan">إنشاء خطة تلقائية من العقود</button>
             </div>
+            <table id="weeklyTable" class="data-table weekly-table"><thead><tr><th id="th_week_range">نطاق الأسبوع</th><th id="th_week_worker">اسم العاملة</th><th id="th_week_period">الفترة</th><th id="th_sat">السبت</th><th id="th_sun">الأحد</th><th id="th_mon">الاثنين</th><th id="th_tue">الثلاثاء</th><th id="th_wed">الأربعاء</th><th id="th_thu">الخميس</th><th id="th_fri">الجمعة</th></tr></thead><tbody></tbody></table>
+          </div>
+
+          <aside class="sidebar">
+            <h3 id="sidebar_weekly_daily_title">عقود يومية (خلال الأسبوع)</h3>
+            <div id="weeklyDailyContractsPanel" class="small-note">لا توجد عقود يومية لهذا الأسبوع.</div>
+            <h3 id="sidebar_weekly_monthly_title">عقود شهرية (تغطي الأسبوع)</h3>
+            <div id="weeklyMonthlyContractsPanel" class="small-note">لا توجد عقود شهرية لهذا الأسبوع.</div>
+            <h3 id="sidebar_weekly_tasks_title">مهام الخطة (قابلة للتعديل)</h3>
+            <div id="weeklyTasksPanel" class="small-note">لا توجد مهام مخططة.</div>
+          </aside>
         </div>
+      </section>
+    </main>
+  </div>
 
-        <!-- WEEKLY PLANNING (planning UI kept; it uses daily+monthly contracts only) -->
-        <div class="section" id="weeklyTableSection">
-            <h2 id="weeklyHeading">خطة الأسبوع ومتابعة الأعمال</h2>
-            <div class="layout-flex">
-                <div class="main-area">
-                    <div class="controls">
-                        <button onclick="changeWeek(-1)" class="btn-export" id="btnPrevWeek">الأسبوع السابق</button>
-                        <input type="date" id="weekDate" value="">
-                        <button onclick="changeWeek(1)" class="btn-export" id="btnNextWeek">الأسبوع التالي</button>
-                        <button class="btn-export" onclick="renderWeeklyTable()" id="btnRenderWeek">عرض الأسبوع</button>
-                        <button class="btn-export" onclick="generatePlanFromContracts()" id="btnGeneratePlan">إنشاء خطة تلقائية من العقود</button>
-                    </div>
-                    <table id="weeklyTable" class="weekly-table">
-                        <thead><tr><th id="th_week_range">نطاق الأسبوع</th><th id="th_week_worker">اسم العاملة</th><th id="th_week_period">الفترة</th><th id="th_sat">السبت</th><th id="th_sun">الأحد</th><th id="th_mon">الاثنين</th><th id="th_tue">الثلاثاء</th><th id="th_wed">الأربعاء</th><th id="th_thu">الخميس</th><th id="th_fri">الجمعة</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
+  <datalist id="clientList"></datalist>
 
-                <div class="sidebar">
-                    <h3 id="sidebar_weekly_daily_title">عقود يومية (خلال الأسبوع)</h3>
-                    <div id="weeklyDailyContractsPanel" class="small-note">لا توجد عقود يومية لهذا الأسبوع.</div>
-                    <h3 style="margin-top:12px;" id="sidebar_weekly_monthly_title">عقود شهرية (تغطي الأسبوع)</h3>
-                    <div id="weeklyMonthlyContractsPanel" class="small-note">لا توجد عقود شهرية لهذا الأسبوع.</div>
-                    <h3 style="margin-top:12px;" id="sidebar_weekly_tasks_title">مهام الخطة (قابلة للتعديل)</h3>
-                    <div id="weeklyTasksPanel" class="small-note">لا توجد مهام مخططة.</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-<script>
-/* ===== Data stores ===== */
-let clients = [], workers = [];
-let dailyContracts = [], monthlyContracts = [];
-let manualEntries = [], tasks = [];
-
-/* ===== i18n ===== */
-const translations = {
-    ar: {
-        langName: 'العربية',
-        title: 'نظام إدارة شركة تنظيفات — تعبئة تلقائية لبيانات العميل',
-        nav_clients: 'العملاء', nav_workers: 'الموظفات', nav_contracts: 'العقود', nav_daily: 'جدول الأعمال اليومية', nav_weekly: 'خطة الأسبوع ومتابعة', nav_export: 'تصدير كامل البيانات (Excel)',
-        topDailyTitle: 'العقود اليومية (اليوم)', topMonthlyTitle: 'العقود الشهرية (الشهر الحالي)',
-        clientsHeading: 'إدارة العملاء', label_client_name: 'اسم العميل', label_client_phone: 'رقم الجوال', label_client_area: 'المنطقة', label_client_map: 'رابط المنطقة (Google Maps)', btnAddClient: 'إضافة عميل', btnExportClients: 'تصدير العملاء إلى Excel',
-        th_client_name: 'الاسم', th_client_phone: 'الجوال', th_client_area: 'المنطقة', th_client_map: 'رابط المنطقة', th_client_actions: 'إجراءات',
-        delete: 'حذف', edit: 'تعديل', update: 'تحديث', cancel: 'إلغاء',
-        workersHeading: 'إدارة الموظفات', label_worker_name: 'اسم الموظفة', label_worker_phone: 'رقم الجوال', label_worker_nat: 'الجنسية', btnAddWorker: 'إضافة موظفة', btnExportWorkers: 'تصدير الموظفات إلى Excel',
-        th_worker_name: 'الاسم', th_worker_phone: 'الجوال', th_worker_nat: 'الجنسية', th_worker_actions: 'إجراءات',
-        contractsHeading: 'إدارة العقود (يومي - شهري)', tab_all: 'عرض الكل', tab_daily: 'نموذج يومي', tab_monthly: 'نموذج شهري',
-        dailyFormTitle: 'إضافة / تعديل عقد يومي', monthlyFormTitle: 'إضافة / تعديل عقد شهري',
-        label_client: 'العميل', label_phone: 'جوال العميل', label_area: 'المنطقة', label_map: 'رابط المنطقة', label_worker: 'الموظفة', label_period: 'الفترة', label_start: 'تاريخ البداية', label_end: 'تاريخ النهاية', label_value: 'قيمة العقد', label_payment: 'حالة الدفع', label_notes: 'ملاحظات',
-        btnSaveDaily: 'حفظ عقد يومي', btnCancelDaily: 'إلغاء', btnSaveMonthly: 'حفظ عقد شهري', btnCancelMonthly: 'إلغاء',
-        allContractsTitle: 'جميع العقود', th_contract_type: 'نوع', th_contract_client: 'العميل', th_contract_phone: 'جوال', th_contract_area: 'المنطقة', th_contract_map: 'رابط', th_contract_worker: 'الموظفة', th_contract_period: 'الفترة', th_contract_start: 'بداية', th_contract_end: 'نهاية', th_contract_value: 'قيمة', th_contract_payment: 'حالة الدفع', th_contract_notes: 'ملاحظات', th_contract_actions: 'إجراءات',
-        dailyContractsTitle: 'العقود اليومية', monthlyContractsTitle: 'العقود الشهرية',
-        dailyHeading: 'جدول الأعمال اليومية', label_choose_date: 'اختر التاريخ:', label_choose_worker: 'اختر الموظفة:', label_choose_period: 'عرض حسب الفترة:', btnRenderDaily: 'عرض',
-        manualEntryTitle: 'أضف إدخال / مهمة (يدوي أو خطة)', manualNoteText: 'عند كتابة اسم العميل مُطابقًا لاسم موجود في صفحة "العملاء" سيقوم النظام بملء الجوال والمنطقة والرابط تلقائيًا.',
-        th_ds_date: 'التاريخ', th_ds_client: 'اسم العميل', th_ds_worker: 'اسم العاملة', th_ds_period: 'الفترة', th_ds_phone: 'رقم الجوال', th_ds_area: 'المنطقة', th_ds_driver: 'سائق', th_ds_amount: 'المبلغ', th_ds_status: 'حالة الدفع', th_ds_method: 'طريقة الدفع', th_ds_hours: 'عدد الساعات', th_ds_notes: 'ملاحظات', th_ds_source: 'مصدر', th_ds_actions: 'إجراءات',
-        sidebar_dailyContracts_title: 'العقود اليومية (التاريخ المحدد)', sidebar_monthlyContracts_title: 'العقود الشهرية (التاريخ المحدد)',
-        no_daily_today: 'لا توجد عقود يومية اليوم.', no_monthly_this_month: 'لا توجد عقود شهرية هذا الشهر.',
-        no_tasks_on_date: 'لا توجد مهام لهذا التاريخ.', no_items: 'لا توجد عناصر.',
-        weeklyHeading: 'خطة الأسبوع ومتابعة الأعمال', btnPrevWeek: 'الأسبوع السابق', btnNextWeek: 'الأسبوع التالي', btnRenderWeek: 'عرض الأسبوع', btnGeneratePlan: 'إنشاء خطة تلقائية من العقود',
-        th_week_range: 'نطاق الأسبوع', th_week_worker: 'اسم العاملة', th_week_period: 'الفترة', th_sat: 'السبت', th_sun: 'الأحد', th_mon: 'الاثنين', th_tue: 'الثلاثاء', th_wed: 'الأربعاء', th_thu: 'الخميس', th_fri: 'الجمعة',
-        sidebar_weekly_daily_title: 'عقود يومية (خلال الأسبوع)', sidebar_weekly_monthly_title: 'عقود شهرية (تغطي الأسبوع)', sidebar_weekly_tasks_title: 'مهام الخطة (قابلة للتعديل)',
-        add_task_quick: 'إضافة مهمة', no_planned_tasks: 'لا توجد مهام مخططة.',
-        save: 'حفظ',
-        confirm_delete_client: 'حذف العميل؟', confirm_delete_worker: 'حذف الموظفة؟', confirm_delete_contract: 'حذف العقد؟', confirm_delete_manual: 'حذف الإدخال اليدوي؟', confirm_delete_task: 'حذف المهمة المخططة؟',
-        alert_choose_week_date: 'اختر تاريخ الأسبوع أولاً', alert_created_tasks: (n)=>`تم إنشاء ${n} مهمة/مهام من العقود في الخطة (إن وجدت).`,
-        alert_worker_unavailable: 'الموظفة لديها عقد في هذا التاريخ — لا يمكن إضافتها يدوياً.',
-        export_filename: 'cleaning_data.xls',
-        type_daily: 'يومي', type_monthly: 'شهري',
-        source_manual: 'يدوي', source_plan: 'خطة', source_contract: 'عقد',
-        open_ended: 'غير منتهي'
-    },
-    en: {
-        langName: 'English',
-        title: 'Cleaning Company Manager — Autofill Client Data',
-        nav_clients: 'Clients', nav_workers: 'Workers', nav_contracts: 'Contracts', nav_daily: 'Daily Schedule', nav_weekly: 'Weekly Plan', nav_export: 'Export All Data (Excel)',
-        topDailyTitle: 'Daily Contracts (Today)', topMonthlyTitle: 'Monthly Contracts (Current Month)',
-        clientsHeading: 'Clients Management', label_client_name: 'Client Name', label_client_phone: 'Phone', label_client_area: 'Area', label_client_map: 'Area Link (Google Maps)', btnAddClient: 'Add Client', btnExportClients: 'Export Clients to Excel',
-        th_client_name: 'Name', th_client_phone: 'Phone', th_client_area: 'Area', th_client_map: 'Link', th_client_actions: 'Actions',
-        delete: 'Delete', edit: 'Edit', update: 'Update', cancel: 'Cancel',
-        workersHeading: 'Workers Management', label_worker_name: 'Worker Name', label_worker_phone: 'Phone', label_worker_nat: 'Nationality', btnAddWorker: 'Add Worker', btnExportWorkers: 'Export Workers to Excel',
-        th_worker_name: 'Name', th_worker_phone: 'Phone', th_worker_nat: 'Nationality', th_worker_actions: 'Actions',
-        contractsHeading: 'Contracts Management (Daily - Monthly)', tab_all: 'All', tab_daily: 'Daily', tab_monthly: 'Monthly',
-        dailyFormTitle: 'Add / Edit Daily Contract', monthlyFormTitle: 'Add / Edit Monthly Contract',
-        label_client: 'Client', label_phone: 'Client Phone', label_area: 'Area', label_map: 'Area Link', label_worker: 'Worker', label_period: 'Period', label_start: 'Start Date', label_end: 'End Date', label_value: 'Contract Value', label_payment: 'Payment Status', label_notes: 'Notes',
-        btnSaveDaily: 'Save Daily Contract', btnCancelDaily: 'Cancel', btnSaveMonthly: 'Save Monthly Contract', btnCancelMonthly: 'Cancel',
-        allContractsTitle: 'All Contracts', th_contract_type: 'Type', th_contract_client: 'Client', th_contract_phone: 'Phone', th_contract_area: 'Area', th_contract_map: 'Link', th_contract_worker: 'Worker', th_contract_period: 'Period', th_contract_start: 'Start', th_contract_end: 'End', th_contract_value: 'Value', th_contract_payment: 'Payment', th_contract_notes: 'Notes', th_contract_actions: 'Actions',
-        dailyContractsTitle: 'Daily Contracts', monthlyContractsTitle: 'Monthly Contracts',
-        dailyHeading: 'Daily Schedule', label_choose_date: 'Choose Date:', label_choose_worker: 'Choose Worker:', label_choose_period: 'Filter Period:', btnRenderDaily: 'Show',
-        manualEntryTitle: 'Add Entry / Task (manual or plan)', manualNoteText: 'When you type a client name that matches an existing client, phone/area/map are auto-filled.',
-        th_ds_date: 'Date', th_ds_client: 'Client Name', th_ds_worker: 'Worker', th_ds_period: 'Period', th_ds_phone: 'Phone', th_ds_area: 'Area', th_ds_driver: 'Driver', th_ds_amount: 'Amount', th_ds_status: 'Payment Status', th_ds_method: 'Payment Method', th_ds_hours: 'Hours', th_ds_notes: 'Notes', th_ds_source: 'Source', th_ds_actions: 'Actions',
-        sidebar_dailyContracts_title: 'Daily Contracts (Selected Date)', sidebar_monthlyContracts_title: 'Monthly Contracts (Selected Date)',
-        no_daily_today: 'No daily contracts today.', no_monthly_this_month: 'No monthly contracts this month.',
-        no_tasks_on_date: 'No tasks for this date.', no_items: 'No items.',
-        weeklyHeading: 'Weekly Planning and Follow-up', btnPrevWeek: 'Previous Week', btnNextWeek: 'Next Week', btnRenderWeek: 'Show Week', btnGeneratePlan: 'Generate Plan From Contracts',
-        th_week_range: 'Week Range', th_week_worker: 'Worker', th_week_period: 'Period', th_sat: 'Sat', th_sun: 'Sun', th_mon: 'Mon', th_tue: 'Tue', th_wed: 'Wed', th_thu: 'Thu', th_fri: 'Fri',
-        sidebar_weekly_daily_title: 'Daily Contracts (during week)', sidebar_weekly_monthly_title: 'Monthly Contracts (covering week)', sidebar_weekly_tasks_title: 'Planned Tasks (editable)',
-        add_task_quick: 'Add Task', no_planned_tasks: 'No planned tasks.',
-        save: 'Save',
-        confirm_delete_client: 'Delete client?', confirm_delete_worker: 'Delete worker?', confirm_delete_contract: 'Delete contract?', confirm_delete_manual: 'Delete manual entry?', confirm_delete_task: 'Delete planned task?',
-        alert_choose_week_date: 'Please choose the week date first', alert_created_tasks: (n)=>`${n} task(s) were created from contracts (if any).`,
-        alert_worker_unavailable: 'Worker has a contract on this date — cannot add manually.',
-        export_filename: 'cleaning_data.xls',
-        type_daily: 'Daily', type_monthly: 'Monthly',
-        source_manual: 'Manual', source_plan: 'Plan', source_contract: 'Contract',
-        open_ended: 'Open-ended'
-    }
-};
-
-let lang = localStorage.getItem('cleaning_lang') || (navigator.language && navigator.language.startsWith('en') ? 'en' : 'ar');
-
-function t(key, ...args){
-    const dict = translations[lang] || translations['ar'];
-    const v = dict[key];
-    if(typeof v === 'function') return v(...args);
-    if(v !== undefined) return v;
-    return (lang === 'ar') ? key : key;
-}
-
-function setLanguage(newLang){
-    lang = newLang;
-    localStorage.setItem('cleaning_lang', lang);
-    document.documentElement.lang = lang === 'ar' ? 'ar' : 'en';
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-    document.getElementById('btnLangAr').classList.toggle('active', lang === 'ar');
-    document.getElementById('btnLangEn').classList.toggle('active', lang === 'en');
-    translateUI();
-    renderClients(); renderWorkers(); renderContracts(); updateTopContractPanels(); renderDailySchedule(); renderWeeklyTable(); renderWeeklyTasksPanel();
-}
-
-/* ===== Date formatting with locale-aware weekdays ===== */
-function pad(n){ return n.toString().padStart(2,'0'); }
-function isoDate(d){ return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
-function formatDateLocalized(dateStr){
-    if(!dateStr) return t('open_ended');
-    const d=new Date(dateStr);
-    const weekDaysAr=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-    const weekDaysEn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-    const wd = (lang === 'ar') ? weekDaysAr[d.getDay()] : weekDaysEn[d.getDay()];
-    return `${wd} ${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-}
-
-/* ===== UI translation of static elements ===== */
-function translateUI(){
-    const setText = (id, key) => { const el = document.getElementById(id); if(el) el.textContent = t(key); };
-
-    setText('appTitle','title');
-    setText('nav_clients','nav_clients'); setText('nav_workers','nav_workers'); setText('nav_contracts','nav_contracts'); setText('nav_daily','nav_daily'); setText('nav_weekly','nav_weekly'); setText('nav_export','nav_export');
-    setText('topDailyTitle','topDailyTitle'); setText('topMonthlyTitle','topMonthlyTitle');
-
-    setText('clientsHeading','clientsHeading'); setText('label_client_name','label_client_name'); setText('label_client_phone','label_client_phone'); setText('label_client_area','label_client_area'); setText('label_client_map','label_client_map'); setText('btnAddClient','btnAddClient'); setText('btnExportClients','btnExportClients');
-    setText('th_client_name','th_client_name'); setText('th_client_phone','th_client_phone'); setText('th_client_area','th_client_area'); setText('th_client_map','th_client_map'); setText('th_client_actions','th_client_actions');
-
-    setText('workersHeading','workersHeading'); setText('label_worker_name','label_worker_name'); setText('label_worker_phone','label_worker_phone'); setText('label_worker_nat','label_worker_nat'); setText('btnAddWorker','btnAddWorker'); setText('btnExportWorkers','btnExportWorkers'); setText('th_worker_name','th_worker_name'); setText('th_worker_phone','th_worker_phone'); setText('th_worker_nat','th_worker_nat'); setText('th_worker_actions','th_worker_actions');
-
-    setText('contractsHeading','contractsHeading'); setText('tab_all','tab_all'); setText('tab_daily','tab_daily'); setText('tab_monthly','tab_monthly');
-
-    setText('dailyFormTitle','dailyFormTitle'); setText('monthlyFormTitle','monthlyFormTitle');
-
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if(key) el.textContent = t(key);
-    });
-
-    setText('allContractsTitle','allContractsTitle'); setText('th_contract_type','th_contract_type'); setText('th_contract_client','th_contract_client'); setText('th_contract_phone','th_contract_phone'); setText('th_contract_area','th_contract_area'); setText('th_contract_map','th_contract_map'); setText('th_contract_worker','th_contract_worker'); setText('th_contract_period','th_contract_period'); setText('th_contract_start','th_contract_start'); setText('th_contract_end','th_contract_end'); setText('th_contract_value','th_contract_value'); setText('th_contract_payment','th_contract_payment'); setText('th_contract_notes','th_contract_notes'); setText('th_contract_actions','th_contract_actions');
-
-    setText('dailyHeading','dailyHeading'); setText('label_choose_date','label_choose_date'); setText('label_choose_worker','label_choose_worker'); setText('label_choose_period','label_choose_period'); setText('btnRenderDaily','btnRenderDaily'); setText('manualEntryTitle','manualEntryTitle'); setText('manualNoteText','manualNoteText');
-    setText('th_ds_date','th_ds_date'); setText('th_ds_client','th_ds_client'); setText('th_ds_worker','th_ds_worker'); setText('th_ds_period','th_ds_period'); setText('th_ds_phone','th_ds_phone'); setText('th_ds_area','th_ds_area'); setText('th_ds_driver','th_ds_driver'); setText('th_ds_amount','th_ds_amount'); setText('th_ds_status','th_ds_status'); setText('th_ds_method','th_ds_method'); setText('th_ds_hours','th_ds_hours'); setText('th_ds_notes','th_ds_notes'); setText('th_ds_source','th_ds_source'); setText('th_ds_actions','th_ds_actions');
-
-    setText('weeklyHeading','weeklyHeading'); setText('btnPrevWeek','btnPrevWeek'); setText('btnNextWeek','btnNextWeek'); setText('btnRenderWeek','btnRenderWeek'); setText('btnGeneratePlan','btnGeneratePlan'); setText('th_week_range','th_week_range'); setText('th_week_worker','th_week_worker'); setText('th_week_period','th_week_period'); setText('th_sat','th_sat'); setText('th_sun','th_sun'); setText('th_mon','th_mon'); setText('th_tue','th_tue'); setText('th_wed','th_wed'); setText('th_thu','th_thu'); setText('th_fri','th_fri');
-
-    setText('sidebar_weekly_daily_title','sidebar_weekly_daily_title'); setText('sidebar_weekly_monthly_title','sidebar_weekly_monthly_title'); setText('sidebar_weekly_tasks_title','sidebar_weekly_tasks_title');
-
-    const btnExp = document.getElementById('btnExportContracts'); if(btnExp) btnExp.textContent = t('btnExportContracts') || t('nav_export');
-
-    const cmEl = document.getElementById('clientMapUrl');
-    if(cmEl) cmEl.placeholder = lang === 'ar' ? 'https://maps.google.com/...' : 'https://maps.google.com/...';
-    const manualClientEl = document.getElementById('manualClient');
-    if(manualClientEl) manualClientEl.placeholder = lang === 'ar' ? 'اسم العميل (يمكن كتابة الاسم أو اختياره من القائمة في شاشة العملاء)' : 'Client name (type or select from Clients)';
-}
-
-/* ===== UI navigation ===== */
-function showSection(id){
-    document.querySelectorAll('.section').forEach(s=>s.style.display='none');
-    document.getElementById(id).style.display='block';
-    document.querySelectorAll('.nav-btn').forEach(btn=>btn.classList.remove('active'));
-    const idx = ['clientsSection','workersSection','contractsSection','dailyScheduleSection','weeklyTableSection'].indexOf(id);
-    if(idx >= 0) document.querySelectorAll('.nav-btn')[idx].classList.add('active');
-    if(id==='dailyScheduleSection') updateDailyControls();
-    if(id==='weeklyTableSection') updateWeekControls();
-}
-
-/* ===== Contracts subtab switching ===== */
-function switchContractTab(tab){
-    document.querySelectorAll('.contracts-subtab').forEach(el=>el.classList.remove('active'));
-    document.getElementById('contractsAllContainer').style.display='none';
-    document.getElementById('contractsDailyContainer').style.display='none';
-    document.getElementById('contractsMonthlyContainer').style.display='none';
-    document.getElementById('form_daily').style.display='none';
-    document.getElementById('form_monthly').style.display='none';
-
-    if(tab === 'all'){ document.getElementById('tab_all').classList.add('active'); document.getElementById('contractsAllContainer').style.display='block'; }
-    else if(tab === 'daily'){ const el=document.getElementById('tab_daily'); if(el) el.classList.add('active'); document.getElementById('form_daily').style.display='block'; document.getElementById('contractsDailyContainer').style.display='block'; }
-    else if(tab === 'monthly'){ const el=document.getElementById('tab_monthly'); if(el) el.classList.add('active'); document.getElementById('form_monthly').style.display='block'; document.getElementById('contractsMonthlyContainer').style.display='block'; }
-}
-
-/* ===== Top panels ===== */
-function updateTopContractPanels(){
-    const today=new Date(), todayStr=isoDate(today);
-    const daily = dailyContracts.filter(c=>{
-        // check if contract occurs today (any period)
-        return getContractPeriodsOnDate(c, today).length>0;
-    });
-    const monthStart=new Date(today.getFullYear(), today.getMonth(), 1);
-    const monthEnd=new Date(today.getFullYear(), today.getMonth()+1, 0);
-    const monthly = monthlyContracts.filter(c => !(new Date(c.end) < monthStart || new Date(c.start) > monthEnd));
-    const topDaily = document.getElementById('topDailyContent');
-    const topMonthly = document.getElementById('topMonthlyContent');
-    if(topDaily) topDaily.innerHTML = daily.length ? daily.map((c,i)=>`<div class="daily-contracts">#${i+1} ${escapeHtml(c.client)} — ${escapeHtml(c.worker)} — ${escapeHtml(summaryDayPeriods(c))}</div>`).join('') : t('no_daily_today');
-    if(topMonthly) topMonthly.innerHTML = monthly.length ? monthly.map((c,i)=>`<div class="monthly-contracts">#${i+1} ${escapeHtml(c.client)} — ${escapeHtml(c.worker)} — ${escapeHtml(c.period||'الكل')}</div>`).join('') : t('no_monthly_this_month');
-}
-
-/* ===== Helpers ===== */
-function escapeHtml(s){ if(!s) return ''; return s.toString().replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]; }); }
-
-function weekdaysToNames(arr){
-    if(!arr || !arr.length) return '';
-    const names = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-    return arr.map(i=>names[i]).join(', ');
-}
-function summaryDayPeriods(c){
-    // summarize dayPeriods or legacy period
-    if(!c) return '';
-    if(c.dayPeriods){
-        const names = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-        const parts = [];
-        Object.keys(c.dayPeriods).sort((a,b)=>a-b).forEach(k=>{
-            const periods = c.dayPeriods[k];
-            parts.push(`${names[k]}:${periods.join('/')}`);
-        });
-        return parts.join(' | ');
-    } else if(c.weekdays && c.weekdays.length){
-        return weekdaysToNames(c.weekdays) + (c.period ? ` — ${c.period}` : '');
-    } else {
-        return c.period || 'الكل';
-    }
-}
-
-/* ===== Clients ===== */
-document.getElementById('clientForm').onsubmit = function(e){
-    e.preventDefault();
-    const name = document.getElementById('clientName').value;
-    // إزالة التحقق من وجود اسم العميل
-    clients.push({ name: name ? name.trim() : '', phone: document.getElementById('clientPhone').value, area: document.getElementById('clientArea').value, mapUrl: document.getElementById('clientMapUrl').value });
-    saveData(); renderClients(); this.reset(); updateContractFormSelects(); updateTopContractPanels();
-};
-function renderClients(){
-    const tbody=document.querySelector('#clientsTable tbody'); if(!tbody) return;
-    tbody.innerHTML='';
-    clients.forEach((c,i)=>{ tbody.innerHTML += `<tr><td>${escapeHtml(c.name)}</td><td>${escapeHtml(c.phone)}</td><td>${escapeHtml(c.area)}</td><td>${c.mapUrl?`<a class="map-link" target="_blank" href="${escapeHtml(c.mapUrl)}">${t('th_client_map')}</a>`:'-'}</td><td><button class="btn-edit" onclick="editClient(${i})">${t('edit')}</button> <button class="btn-danger" onclick="deleteClient(${i})">${t('delete')}</button></td></tr>`; });
-}
-function deleteClient(i){ if(confirm(t('confirm_delete_client'))){ clients.splice(i,1); saveData(); renderClients(); updateContractFormSelects(); updateTopContractPanels(); }}
-
-/* ===== Workers ===== */
-document.getElementById('workerForm').onsubmit = function(e){
-    e.preventDefault();
-    const name = document.getElementById('workerName').value;
-    // إزالة التحقق من وجود اسم الموظفة
-    workers.push({ name: name ? name.trim() : '', phone: document.getElementById('workerPhone').value, nationality: document.getElementById('workerNationality').value });
-    saveData(); renderWorkers(); this.reset(); updateContractFormSelects(); updateTopContractPanels();
-};
-function renderWorkers(){
-    const tbody=document.querySelector('#workersTable tbody'); tbody.innerHTML='';
-    workers.forEach((w,i)=>{ tbody.innerHTML += `<tr><td>${escapeHtml(w.name)}</td><td>${escapeHtml(w.phone)}</td><td>${escapeHtml(w.nationality||'-')}</td><td><button class="btn-edit" onclick="editWorker(${i})">${t('edit')}</button> <button class="btn-danger" onclick="deleteWorker(${i})">${t('delete')}</button></td></tr>`; });
-}
-function deleteWorker(i){ if(confirm(t('confirm_delete_worker'))){ workers.splice(i,1); saveData(); renderWorkers(); updateContractFormSelects(); updateTopContractPanels(); }}
-
-/* ===== دوال التعديل للعملاء والموظفات ===== */
-function editClient(i) {
-    const client = clients[i];
-    if (!client) return;
-    
-    // تعبئة النموذج ببيانات العميل الحالية
-    document.getElementById('clientName').value = client.name || '';
-    document.getElementById('clientPhone').value = client.phone || '';
-    document.getElementById('clientArea').value = client.area || '';
-    document.getElementById('clientMapUrl').value = client.mapUrl || '';
-    
-    // إضافة زر تحديث وإلغاء التعديل
-    const form = document.getElementById('clientForm');
-    let updateBtn = document.getElementById('updateClientBtn');
-    let cancelBtn = document.getElementById('cancelClientEdit');
-    
-    if (!updateBtn) {
-        updateBtn = document.createElement('button');
-        updateBtn.type = 'button';
-        updateBtn.className = 'form-btn';
-        updateBtn.id = 'updateClientBtn';
-        updateBtn.textContent = t('update');
-        updateBtn.style.background = '#27ae60';
-        updateBtn.style.marginTop = '10px';
-        
-        cancelBtn = document.createElement('button');
-        cancelBtn.type = 'button';
-        cancelBtn.className = 'form-btn';
-        cancelBtn.id = 'cancelClientEdit';
-        cancelBtn.textContent = t('cancel');
-        cancelBtn.style.background = '#666';
-        cancelBtn.style.marginTop = '10px';
-        cancelBtn.style.marginLeft = '10px';
-        
-        const btnContainer = document.createElement('div');
-        btnContainer.style.display = 'flex';
-        btnContainer.style.gap = '10px';
-        btnContainer.appendChild(updateBtn);
-        btnContainer.appendChild(cancelBtn);
-        
-        form.appendChild(btnContainer);
-    }
-    
-    updateBtn.onclick = function() {
-        updateClient(i);
-    };
-    
-    cancelBtn.onclick = function() {
-        cancelClientEdit();
-    };
-    
-    // تمرير الفهرس للاستخدام في التحديث
-    updateBtn.setAttribute('data-index', i);
-    
-    // التمرير إلى قسم العملاء
-    showSection('clientsSection');
-}
-
-function updateClient(i) {
-    const client = clients[i];
-    if (!client) return;
-    
-    // تحديث البيانات
-    client.name = document.getElementById('clientName').value.trim();
-    client.phone = document.getElementById('clientPhone').value;
-    client.area = document.getElementById('clientArea').value;
-    client.mapUrl = document.getElementById('clientMapUrl').value;
-    
-    // حفظ وإعادة التحميل
-    saveData();
-    renderClients();
-    cancelClientEdit();
-    updateContractFormSelects();
-    updateTopContractPanels();
-}
-
-function cancelClientEdit() {
-    // إعادة تعيين النموذج
-    document.getElementById('clientForm').reset();
-    
-    // إزالة أزرار التعديل
-    const updateBtn = document.getElementById('updateClientBtn');
-    const cancelBtn = document.getElementById('cancelClientEdit');
-    
-    if (updateBtn) updateBtn.remove();
-    if (cancelBtn) cancelBtn.remove();
-}
-
-function editWorker(i) {
-    const worker = workers[i];
-    if (!worker) return;
-    
-    // تعبئة النموذج ببيانات الموظفة الحالية
-    document.getElementById('workerName').value = worker.name || '';
-    document.getElementById('workerPhone').value = worker.phone || '';
-    document.getElementById('workerNationality').value = worker.nationality || '';
-    
-    // إضافة زر تحديث وإلغاء التعديل
-    const form = document.getElementById('workerForm');
-    let updateBtn = document.getElementById('updateWorkerBtn');
-    let cancelBtn = document.getElementById('cancelWorkerEdit');
-    
-    if (!updateBtn) {
-        updateBtn = document.createElement('button');
-        updateBtn.type = 'button';
-        updateBtn.className = 'form-btn';
-        updateBtn.id = 'updateWorkerBtn';
-        updateBtn.textContent = t('update');
-        updateBtn.style.background = '#27ae60';
-        updateBtn.style.marginTop = '10px';
-        
-        cancelBtn = document.createElement('button');
-        cancelBtn.type = 'button';
-        cancelBtn.className = 'form-btn';
-        cancelBtn.id = 'cancelWorkerEdit';
-        cancelBtn.textContent = t('cancel');
-        cancelBtn.style.background = '#666';
-        cancelBtn.style.marginTop = '10px';
-        cancelBtn.style.marginLeft = '10px';
-        
-        const btnContainer = document.createElement('div');
-        btnContainer.style.display = 'flex';
-        btnContainer.style.gap = '10px';
-        btnContainer.appendChild(updateBtn);
-        btnContainer.appendChild(cancelBtn);
-        
-        form.appendChild(btnContainer);
-    }
-    
-    updateBtn.onclick = function() {
-        updateWorker(i);
-    };
-    
-    cancelBtn.onclick = function() {
-        cancelWorkerEdit();
-    };
-    
-    // تمرير الفهرس للاستخدام في التحديث
-    updateBtn.setAttribute('data-index', i);
-    
-    // التمرير إلى قسم الموظفات
-    showSection('workersSection');
-}
-
-function updateWorker(i) {
-    const worker = workers[i];
-    if (!worker) return;
-    
-    // تحديث البيانات
-    worker.name = document.getElementById('workerName').value.trim();
-    worker.phone = document.getElementById('workerPhone').value;
-    worker.nationality = document.getElementById('workerNationality').value;
-    
-    // حفظ وإعادة التحميل
-    saveData();
-    renderWorkers();
-    cancelWorkerEdit();
-    updateContractFormSelects();
-    updateTopContractPanels();
-}
-
-function cancelWorkerEdit() {
-    // إعادة تعيين النموذج
-    document.getElementById('workerForm').reset();
-    
-    // إزالة أزرار التعديل
-    const updateBtn = document.getElementById('updateWorkerBtn');
-    const cancelBtn = document.getElementById('cancelWorkerEdit');
-    
-    if (updateBtn) updateBtn.remove();
-    if (cancelBtn) cancelBtn.remove();
-}
-
-/* ===== Contracts forms helpers & autofill ===== */
-function updateContractFormSelects(){
-    const clientOptions = clients.map(c=>`<option value="${escapeHtml(c.name)}">${escapeHtml(c.name)}</option>`).join('') || `<option value="">-- ${t('no_items')} --</option>`;
-    const workerOptions = workers.map(w=>`<option value="${escapeHtml(w.name)}">${escapeHtml(w.name)}</option>`).join('') || `<option value="">-- ${t('no_items')} --</option>`;
-    
-    ['daily','monthly'].forEach(prefix => {
-        const clientEl = document.getElementById(prefix+'_contractClient');
-        const workerSel = document.getElementById(prefix+'_contractWorker');
-        if(clientEl){
-            if(clientEl.tagName && clientEl.tagName.toUpperCase() === 'SELECT'){
-                clientEl.innerHTML = clientOptions;
-            } 
-        }
-        if(workerSel) workerSel.innerHTML = workerOptions;
-    });
-
-    // تحديث قائمة العاملات في الإدخال اليدوي (مع التحقق من التوافر حسب الفترة نفسها)
-    updateManualWorkerAvailability();
-
-    // تحديث datalist للعملاء
-    const clientList = document.getElementById('clientList');
-    if(clientList) clientList.innerHTML = clients.map(c => `<option value="${escapeHtml(c.name)}">`).join('');
-
-    // تحديث قائمة العملاء في المهام السريعة (لو موجودة)
-    const newTaskClientSel = document.getElementById('newTask_client');
-    if(newTaskClientSel) newTaskClientSel.innerHTML = clientOptions;
-
-    // رسم شبكة الأيام والفترات في العقود اليومية
-    renderDailyWeekdayGrid();
-}
-
-/* ===== دالة جديدة لتحديث توافر الموظفات في الإدخال اليدوي ===== */
-function updateManualWorkerAvailability() {
-    const manualWorkerSel = document.getElementById('manualWorker');
-    if(!manualWorkerSel) return;
-    
-    const today = document.getElementById('manualDate') ? document.getElementById('manualDate').value : '';
-    const period = document.getElementById('manualPeriod') ? document.getElementById('manualPeriod').value : 'الكل';
-    
-    let manualOptions = '';
-    workers.forEach(w => {
-        // التحقق من التوافر بناءً على الفترة المحددة فقط
-        const unavailable = today ? isWorkerUnavailableOnDate(w.name, today, period) : false;
-        manualOptions += `<option value="${escapeHtml(w.name)}" ${unavailable? 'class="unavailable-worker"':''}>${escapeHtml(w.name)}${unavailable?' (غير متاحة)':''}</option>`;
-    });
-    
-    manualWorkerSel.innerHTML = manualOptions || `<option value="">-- ${t('no_items')} --</option>`;
-}
-
-/* populate client details into contract form by prefix (daily/monthly) */
-/* works for both select and input[list] client fields */
-function populateClientDetailsInContract(prefix){
-    const sel = document.getElementById(prefix+'_contractClient');
-    if(!sel) return;
-    const name = sel.value;
-    const client = clients.find(c => c.name === name);
-    const phoneEl = document.getElementById(prefix+'_contractClientPhone');
-    const areaEl = document.getElementById(prefix+'_contractClientArea');
-    const mapEl = document.getElementById(prefix+'_contractClientMap');
-    if(client){
-        if(phoneEl) phoneEl.value = client.phone || '';
-        if(areaEl) areaEl.value = client.area || '';
-        if(mapEl) mapEl.value = client.mapUrl || '';
-    } else {
-        if(phoneEl) phoneEl.value = '';
-        if(areaEl) areaEl.value = '';
-        if(mapEl) mapEl.value = '';
-    }
-}
-
-/* try auto-fill manual entry when manualClient input changes and matches exactly */
-function tryAutoFillManualClient(){
-    const name = document.getElementById('manualClient').value.trim();
-    if(!name) return;
-    const client = clients.find(c => c.name === name);
-    if(client){
-        document.getElementById('manualPhone').value = client.phone || '';
-        document.getElementById('manualArea').value = client.area || '';
-        document.getElementById('manualMap').value = client.mapUrl || '';
-    }
-}
-
-/* populate quick-add task details (newTask_client select) */
-function populateNewTaskDetails(){
-    const sel = document.getElementById('newTask_client');
-    if(!sel) return;
-    const name = sel.value;
-    const client = clients.find(c => c.name === name);
-    const phoneEl = document.getElementById('newTask_phone');
-    const areaEl = document.getElementById('newTask_area');
-    if(client){
-        if(phoneEl) phoneEl.value = client.phone || '';
-        if(areaEl) areaEl.value = client.area || '';
-    } else {
-        if(phoneEl) phoneEl.value = '';
-        if(areaEl) areaEl.value = '';
-    }
-}
-
-/* ===== Daily weekday grid generation and helpers ===== */
-const WEEKDAY_NAMES_AR = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-const WEEKDAY_NAMES_EN = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-function renderDailyWeekdayGrid(){
-    const container = document.getElementById('daily_weekdays_grid');
-    if(!container) return;
-    const names = (lang === 'ar') ? WEEKDAY_NAMES_AR : WEEKDAY_NAMES_EN;
-    let html = '';
-    for(let i=0;i<7;i++){
-        html += `<div class="weekday-row">
-            <div class="day-name">${names[i]}</div>
-            <label><input type="checkbox" id="daily_day_${i}_morning" data-day="${i}" data-period="الصباحية"> ${lang==='ar' ? 'صباحية' : 'Morning'}</label>
-            <label><input type="checkbox" id="daily_day_${i}_evening" data-day="${i}" data-period="المسائية"> ${lang==='ar' ? 'مسائية' : 'Evening'}</label>
-        </div>`;
-    }
-    container.innerHTML = html;
-}
-
-/* read dayPeriods from the grid and return object mapping weekday->array(periods) */
-function readDailyDayPeriodsFromGrid(){
-    const dayPeriods = {};
-    for(let i=0;i<7;i++){
-        const morning = document.getElementById(`daily_day_${i}_morning`);
-        const evening = document.getElementById(`daily_day_${i}_evening`);
-        const arr = [];
-        if(morning && morning.checked) arr.push('الصباحية');
-        if(evening && evening.checked) arr.push('المسائية');
-        if(arr.length) dayPeriods[i] = arr;
-    }
-    return dayPeriods;
-}
-
-/* set grid checkboxes according to a contract's dayPeriods (for edit) */
-function setDailyGridFromContract(c){
-    for(let i=0;i<7;i++){
-        const morning = document.getElementById(`daily_day_${i}_morning`);
-        const evening = document.getElementById(`daily_day_${i}_evening`);
-        if(morning) morning.checked = false;
-        if(evening) evening.checked = false;
-    }
-    if(!c) return;
-    if(c.dayPeriods){
-        Object.keys(c.dayPeriods).forEach(k=>{
-            const idx = parseInt(k,10);
-            const arr = c.dayPeriods[k] || [];
-            if(arr.includes('الصباحية')){
-                const el = document.getElementById(`daily_day_${idx}_morning`);
-                if(el) el.checked = true;
-            }
-            if(arr.includes('المسائية')){
-                const el = document.getElementById(`daily_day_${idx}_evening`);
-                if(el) el.checked = true;
-            }
-        });
-    } else if(c.weekdays && c.weekdays.length){
-        // fallback: check all weekdays with legacy c.period value
-        c.weekdays.forEach(w=>{
-            if(c.period){
-                if(c.period === 'الصباحية'){
-                    const el = document.getElementById(`daily_day_${w}_morning`);
-                    if(el) el.checked = true;
-                } else if(c.period === 'المسائية'){
-                    const el = document.getElementById(`daily_day_${w}_evening`);
-                    if(el) el.checked = true;
-                } else {
-                    const m = document.getElementById(`daily_day_${w}_morning`);
-                    const e = document.getElementById(`daily_day_${w}_evening`);
-                    if(m) m.checked = true;
-                    if(e) e.checked = true;
-                }
-            } else {
-                const m = document.getElementById(`daily_day_${w}_morning`);
-                const e = document.getElementById(`daily_day_${w}_evening`);
-                if(m) m.checked = true;
-                if(e) e.checked = true;
-            }
-        });
-    }
-}
-
-/* ===== Contracts add/edit/delete - daily/monthly ===== */
-/* Daily: collect dayPeriods from the grid and store in c.dayPeriods (object weekday->periods array) */
-document.getElementById('dailyContractForm').onsubmit = function(e){
-    e.preventDefault();
-    const idx = parseInt(document.getElementById('editDailyIndex').value,10);
-    const dayPeriods = readDailyDayPeriodsFromGrid();
-    // derive weekdays array for compatibility
-    const weekdays = Object.keys(dayPeriods).map(k=>parseInt(k,10));
-    const endVal = document.getElementById('daily_contractEnd').value || '';
-    const c = {
-        type:'يومي',
-        client: document.getElementById('daily_contractClient').value,
-        clientPhone: document.getElementById('daily_contractClientPhone').value,
-        clientArea: document.getElementById('daily_contractClientArea').value,
-        clientMapUrl: document.getElementById('daily_contractClientMap').value,
-        worker: document.getElementById('daily_contractWorker').value,
-        // store dayPeriods if provided; can be open-ended (no end)
-        dayPeriods: Object.keys(dayPeriods).length ? dayPeriods : undefined,
-        weekdays: Object.keys(dayPeriods).length ? weekdays : [],
-        start: document.getElementById('daily_contractStart').value,
-        end: endVal || '', // allow empty = open-ended
-        value: document.getElementById('daily_contractValue').value,
-        payment: document.getElementById('daily_contractPayment').value,
-        notes: document.getElementById('daily_contractNotes').value
-    };
-    if(idx>=0){ dailyContracts[idx]=c; document.getElementById('editDailyIndex').value=-1; } else dailyContracts.push(c);
-    this.reset(); saveData(); renderContracts(); updateTopContractPanels();
-};
-
-/* Monthly unchanged */
-document.getElementById('monthlyContractForm').onsubmit = function(e){
-    e.preventDefault();
-    const idx = parseInt(document.getElementById('editMonthlyIndex').value,10);
-    const c = { type:'شهري', client: document.getElementById('monthly_contractClient').value, clientPhone: document.getElementById('monthly_contractClientPhone').value, clientArea: document.getElementById('monthly_contractClientArea').value, clientMapUrl: document.getElementById('monthly_contractClientMap').value, worker: document.getElementById('monthly_contractWorker').value, period: document.getElementById('monthly_contractPeriod').value||'الكل', start: document.getElementById('monthly_contractStart').value, end: document.getElementById('monthly_contractEnd').value, value: document.getElementById('monthly_contractValue').value, payment: document.getElementById('monthly_contractPayment').value, notes: document.getElementById('monthly_contractNotes').value };
-    if(idx>=0){ monthlyContracts[idx]=c; document.getElementById('editMonthlyIndex').value=-1; } else monthlyContracts.push(c);
-    this.reset(); saveData(); renderContracts(); updateTopContractPanels();
-};
-
-/* ===== Helper: determine which periods a contract has on a specific date ===== */
-function getContractPeriodsOnDate(c, dateObj){
-    if(!c || !c.start) return [];
-    const start=new Date(c.start); start.setHours(0,0,0,0);
-    const end=c.end? new Date(c.end): null; if(end) end.setHours(0,0,0,0);
-    const d=new Date(dateObj); d.setHours(0,0,0,0);
-
-    if(d < start || (end && d > end)) return [];
-
-    if(c.type==='يومي'){
-        const wd = d.getDay();
-        if(c.dayPeriods && c.dayPeriods.hasOwnProperty(wd)){
-            return c.dayPeriods[wd].slice(); // copy array
-        }
-        if(c.weekdays && Array.isArray(c.weekdays) && c.weekdays.length>0){
-            if(c.weekdays.includes(wd)){
-                if(c.period) return [c.period];
-                return ['الكل'];
-            }
-            return [];
-        }
-        // legacy single-day behavior
-        if(c.start === isoDate(d)){
-            if(c.period) return [c.period];
-            return ['الكل'];
-        }
-        return [];
-    } else if(c.type==='شهري'){
-        if(!end && !c.start) return [];
-        if(d.getDate() === new Date(c.start).getDate()){
-            return c.period ? [c.period] : ['الكل'];
-        }
-        return [];
-    }
-    return [];
-}
-
-/* ===== Matching logic for contract occurrence ===== */
-function isContractOnDate(c, dateObj, periodFilter='الكل'){
-    const periods = getContractPeriodsOnDate(c, dateObj);
-    if(!periods || periods.length===0) return false;
-    if(!periodFilter || periodFilter === 'الكل') return true;
-    // if any period equals periodFilter or periodFilter is 'الكل'
-    return periods.includes(periodFilter) || periods.includes('الكل');
-}
-
-/* ===== Worker availability (period-aware) =====
-   Worker is considered unavailable on that date only if there's a contract for the SAME period (or period='الكل').
-*/
-function isWorkerUnavailableOnDate(workerName, dateStr, periodToCheck='الكل'){
-    if(!workerName) return false;
-    const dateObj = new Date(dateStr);
-    
-    // إذا كانت الفترة المطلوبة هي "الكل"، نتحقق من أي عقد في ذلك اليوم
-    if(periodToCheck === 'الكل') {
-        const dailyBusy = dailyContracts.some(c => c.worker === workerName && isContractOnDate(c, dateObj, 'الكل'));
-        const monthlyBusy = monthlyContracts.some(c => c.worker === workerName && isContractOnDate(c, dateObj, 'الكل'));
-        return dailyBusy || monthlyBusy;
-    }
-    
-    // إذا كانت الفترة محددة (صباحية/مسائية)، نتحقق فقط من العقود في نفس الفترة
-    const dailyBusy = dailyContracts.some(c => c.worker === workerName && isContractOnDate(c, dateObj, periodToCheck));
-    const monthlyBusy = monthlyContracts.some(c => c.worker === workerName && isContractOnDate(c, dateObj, periodToCheck));
-    
-    return dailyBusy || monthlyBusy;
-}
-
-/* ===== Contracts rendering ===== */
-function renderContracts(){
-    const all = [...dailyContracts, ...monthlyContracts];
-    const tbodyAll = document.querySelector('#contractsTableAll tbody'); tbodyAll.innerHTML = '';
-    all.forEach((c,i) => {
-        let displayType = c.type;
-        if(lang === 'en'){
-            displayType = (c.type === 'يومي') ? translations.en.type_daily : (c.type === 'شهري') ? translations.en.type_monthly : c.type;
-        }
-        // include weekdays summary for daily contracts (if any)
-        const wdays = (c.type==='يومي') ? ` ${escapeHtml(summaryDayPeriods(c))}` : '';
-        const endDisplay = c.end ? formatDateLocalized(c.end) : t('open_ended');
-        tbodyAll.innerHTML += `<tr><td>${escapeHtml(displayType)}</td><td>${escapeHtml(c.client||'')}${wdays}</td><td>${escapeHtml(c.clientPhone||'-')}</td><td>${escapeHtml(c.clientArea||'-')}</td><td>${c.clientMapUrl?`<a class="map-link" target="_blank" href="${escapeHtml(c.clientMapUrl)}">${t('th_contract_map')}</a>`:'-'}</td><td>${escapeHtml(c.worker)}</td><td>${escapeHtml(c.period||'الكل')}</td><td>${formatDateLocalized(c.start)}</td><td>${escapeHtml(endDisplay)}</td><td>${escapeHtml(c.value||'')}</td><td>${escapeHtml(c.payment||'')}</td><td>${escapeHtml(c.notes||'')}</td><td><button class="btn-edit" onclick="openEditFromAll(${i})">${t('edit')}</button></td></tr>`;
-    });
-
-    const tbodyD = document.querySelector('#contractsDailyTable tbody'); tbodyD.innerHTML = '';
-    dailyContracts.forEach((c,i)=>{
-        const wsummary = summaryDayPeriods(c);
-        const endDisplay = c.end ? formatDateLocalized(c.end) : t('open_ended');
-        tbodyD.innerHTML += `<tr><td>${escapeHtml(c.client)} ${escapeHtml(wsummary)}</td><td>${escapeHtml(c.clientPhone||'-')}</td><td>${escapeHtml(c.clientArea||'-')}</td><td>${c.clientMapUrl?`<a class="map-link" target="_blank" href="${escapeHtml(c.clientMapUrl)}">${t('th_d_map')}</a>`:'-'}</td><td>${escapeHtml(c.worker)}</td><td>${escapeHtml(c.period||'الكل')}</td><td>${formatDateLocalized(c.start)}</td><td>${escapeHtml(endDisplay)}</td><td>${escapeHtml(c.value||'')}</td><td>${escapeHtml(c.payment||'')}</td><td>${escapeHtml(c.notes||'')}</td><td><button class="btn-edit" onclick="editDaily(${i})">${t('edit')}</button> <button class="btn-danger" onclick="deleteDaily(${i})">${t('delete')}</button></td></tr>`; });
-
-    const tbodyM = document.querySelector('#contractsMonthlyTable tbody'); tbodyM.innerHTML = '';
-    monthlyContracts.forEach((c,i)=>{ tbodyM.innerHTML += `<tr><td>${escapeHtml(c.client)}</td><td>${escapeHtml(c.clientPhone||'-')}</td><td>${escapeHtml(c.clientArea||'-')}</td><td>${c.clientMapUrl?`<a class="map-link" target="_blank" href="${escapeHtml(c.clientMapUrl)}">${t('th_contract_map')}</a>`:'-'}</td><td>${escapeHtml(c.worker)}</td><td>${escapeHtml(c.period||'الكل')}</td><td>${formatDateLocalized(c.start)}</td><td>${formatDateLocalized(c.end)}</td><td>${escapeHtml(c.value||'')}</td><td>${escapeHtml(c.payment||'')}</td><td>${escapeHtml(c.notes||'')}</td><td><button class="btn-edit" onclick="editMonthly(${i})">${t('edit')}</button> <button class="btn-danger" onclick="deleteMonthly(${i})">${t('delete')}</button></td></tr>`; });
-
-    updateContractFormSelects();
-}
-
-/* ===== Edit helpers ===== */
-function editDaily(i){
-    const c=dailyContracts[i];
-    if(!c) return;
-    document.getElementById('editDailyIndex').value=i;
-    const clientInput=document.getElementById('daily_contractClient');
-    if(clientInput) clientInput.value=c.client;
-    populateClientDetailsInContract('daily');
-    document.getElementById('daily_contractWorker').value=c.worker;
-    // set weekday-period grid
-    renderDailyWeekdayGrid();
-    setDailyGridFromContract(c);
-    document.getElementById('daily_contractStart').value=c.start;
-    document.getElementById('daily_contractEnd').value=c.end || '';
-    document.getElementById('daily_contractValue').value=c.value||'';
-    document.getElementById('daily_contractPayment').value=c.payment||'';
-    document.getElementById('daily_contractNotes').value=c.notes||'';
-    switchContractTab('daily');
-}
-function editMonthly(i){ const c=monthlyContracts[i]; if(!c) return; document.getElementById('editMonthlyIndex').value=i; const clientInput=document.getElementById('monthly_contractClient'); if(clientInput) clientInput.value=c.client; populateClientDetailsInContract('monthly'); document.getElementById('monthly_contractWorker').value=c.worker; document.getElementById('monthly_contractPeriod').value=c.period||'الكل'; document.getElementById('monthly_contractStart').value=c.start; document.getElementById('monthly_contractEnd').value=c.end; document.getElementById('monthly_contractValue').value=c.value||''; document.getElementById('monthly_contractPayment').value=c.payment||''; document.getElementById('monthly_contractNotes').value=c.notes||''; switchContractTab('monthly'); }
-
-function openEditFromAll(globalIdx){
-    const all=[...dailyContracts,...monthlyContracts];
-    const c=all[globalIdx]; if(!c) return;
-    let idx=dailyContracts.indexOf(c); if(idx!==-1) return editDaily(idx);
-    idx=monthlyContracts.indexOf(c); if(idx!==-1) return editMonthly(idx);
-}
-
-/* ===== Delete helpers ===== */
-function deleteDaily(i){ if(confirm(t('confirm_delete_contract'))){ dailyContracts.splice(i,1); saveData(); renderContracts(); updateTopContractPanels(); } }
-function deleteMonthly(i){ if(confirm(t('confirm_delete_contract'))){ monthlyContracts.splice(i,1); saveData(); renderContracts(); updateTopContractPanels(); } }
-function cancelDailyEdit(){ document.getElementById('editDailyIndex').value=-1; document.getElementById('dailyContractForm').reset(); renderDailyWeekdayGrid(); }
-function cancelMonthlyEdit(){ document.getElementById('editMonthlyIndex').value=-1; document.getElementById('monthlyContractForm').reset(); }
-
-/* ===== Manual entries & tasks ===== */
-document.getElementById('manualEntryForm').onsubmit = addManualEntry;
-function addManualEntry(e){
-    e.preventDefault();
-    const editingType=document.getElementById('manualEditingType').value;
-    const editingIndex=parseInt(document.getElementById('manualEditingIndex').value,10);
-    const entryDate = document.getElementById('manualDate').value;
-    const entryWorker = document.getElementById('manualWorker').value;
-    const entryPeriod = document.getElementById('manualPeriod').value || 'الكل';
-    // Block if worker has daily/monthly contract on that date for the SAME period
-    if(isWorkerUnavailableOnDate(entryWorker, entryDate, entryPeriod)){
-        alert(t('alert_worker_unavailable'));
-        return;
-    }
-    const entry={ date: entryDate, worker: entryWorker, period: document.getElementById('manualPeriod').value, client: document.getElementById('manualClient').value, phone: document.getElementById('manualPhone').value, area: document.getElementById('manualArea').value, map: document.getElementById('manualMap').value, notes: document.getElementById('manualNotes').value, driver: document.getElementById('manualDriver').value||'', amount: document.getElementById('manualAmount').value||'', paymentStatus: document.getElementById('manualPaymentStatus').value||'', paymentMethod: document.getElementById('manualPaymentMethod').value||'', hours: document.getElementById('manualHours').value||'', source: t('source_manual') };
-    if(editingType==='manual' && editingIndex>=0){ manualEntries[editingIndex]=entry; }
-    else if(editingType==='task' && editingIndex>=0){ tasks[editingIndex]=entry; }
-    else { manualEntries.push(entry); }
-    document.getElementById('manualEditingType').value=''; document.getElementById('manualEditingIndex').value='-1'; document.getElementById('manualEntryForm').reset(); document.getElementById('manualDate').value = entry.date;
-    saveData(); renderDailySchedule(); renderWeeklyTable(); renderWeeklyTasksPanel();
-}
-function editManualEntry(index){
-    const e=manualEntries[index]; if(!e) return;
-    document.getElementById('manualEditingType').value='manual'; document.getElementById('manualEditingIndex').value=index;
-    document.getElementById('manualDate').value=e.date;
-    document.getElementById('manualClient').value=e.client; 
-    document.getElementById('manualPhone').value=e.phone; 
-    document.getElementById('manualArea').value=e.area||'';
-    document.getElementById('manualMap').value=e.map||'';
-    document.getElementById('manualPeriod').value=e.period; 
-    document.getElementById('manualWorker').value=e.worker; 
-    document.getElementById('manualDriver').value=e.driver||''; 
-    document.getElementById('manualHours').value=e.hours||''; 
-    document.getElementById('manualAmount').value=e.amount||''; 
-    document.getElementById('manualPaymentStatus').value=e.paymentStatus||'غير مدفوع'; 
-    document.getElementById('manualPaymentMethod').value=e.paymentMethod||''; 
-    document.getElementById('manualNotes').value=e.notes||''; 
-}
-function deleteManualEntry(index){ if(confirm(t('confirm_delete_manual'))){ manualEntries.splice(index,1); saveData(); renderDailySchedule(); renderWeeklyTable(); renderWeeklyTasksPanel(); } }
-
-function createTaskFromContract(contract, dateStr){
-    // Determine period for that date
-    const p = determinePeriodForContractOnDate(contract, dateStr);
-    return { date: dateStr, worker: contract.worker, period: p, client: contract.client, phone: contract.clientPhone || '', area: contract.clientArea || '', map: contract.clientMapUrl || '', notes: contract.notes || '', driver:'', amount:'', paymentStatus:'', paymentMethod:'', hours:'', source: t('source_plan') };
-}
-function determinePeriodForContractOnDate(contract, dateStr){
-    const periods = getContractPeriodsOnDate(contract, new Date(dateStr));
-    if(!periods || periods.length===0) return 'الكل';
-    if(periods.length === 1) return periods[0];
-    // if both morning & evening, return 'الكل' to indicate full-day
-    return 'الكل';
-}
-function addTask(task){ tasks.push(task); saveData(); renderWeeklyTable(); renderDailySchedule(); renderWeeklyTasksPanel(); }
-function editTask(index){ const tsk=tasks[index]; if(!tsk) return; document.getElementById('manualEditingType').value='task'; document.getElementById('manualEditingIndex').value=index; 
-    document.getElementById('manualDate').value=tsk.date;
-    document.getElementById('manualClient').value=tsk.client; 
-    document.getElementById('manualPhone').value=tsk.phone; 
-    document.getElementById('manualArea').value=tsk.area||'';
-    document.getElementById('manualMap').value=tsk.map||'';
-    document.getElementById('manualPeriod').value=tsk.period; 
-    document.getElementById('manualWorker').value=tsk.worker; 
-    document.getElementById('manualDriver').value=tsk.driver||''; 
-    document.getElementById('manualHours').value=tsk.hours||''; 
-    document.getElementById('manualAmount').value=tsk.amount||''; 
-    document.getElementById('manualPaymentStatus').value=tsk.paymentStatus||'غير مدفوع'; 
-    document.getElementById('manualPaymentMethod').value=tsk.paymentMethod||''; 
-    document.getElementById('manualNotes').value=tsk.notes||''; 
-}
-function deleteTask(index){ if(confirm(t('confirm_delete_task'))){ tasks.splice(index,1); saveData(); renderWeeklyTable(); renderDailySchedule(); renderWeeklyTasksPanel(); } }
-function planContractOccurrence(contractType, contractIndex, dateStr){ let contract=null; if(contractType==='يومي') contract=dailyContracts[contractIndex]; else if(contractType==='شهري') contract=monthlyContracts[contractIndex]; if(!contract) return; const tsk=createTaskFromContract(contract,dateStr); addTask(tsk); }
-
-/* ===== Daily schedule render ===== */
-function updateDailyControls(){
-    if(!document.getElementById('dailyDate').value) document.getElementById('dailyDate').value=(new Date()).toISOString().slice(0,10);
-    const dateStr = document.getElementById('dailyDate').value;
-    const sel=document.getElementById('dailyWorker');
-    // Build options with disabled for unavailable workers according to selected filter period
-    let periodFilter = document.getElementById('dailyPeriodFilter') ? document.getElementById('dailyPeriodFilter').value : 'الكل';
-    if(!periodFilter) periodFilter = 'الكل';
-    let options = `<option value="">${t('nav_workers')}</option>`;
-    workers.forEach(w => {
-        const disabled = isWorkerUnavailableOnDate(w.name, dateStr, periodFilter) ? ' disabled' : '';
-        const note = disabled ? (lang==='ar' ? ' (غير متاحة)' : ' (unavailable)') : '';
-        options += `<option value="${escapeHtml(w.name)}"${disabled}>${escapeHtml(w.name)}${note}</option>`;
-    });
-    sel.innerHTML = options;
-
-    // manualWorker should also reflect availability for the manualDate and selected manualPeriod
-    updateManualWorkerAvailability();
-
-    ['daily_contractWorker','monthly_contractWorker'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML = workers.map(w=>`<option value="${escapeHtml(w.name)}">${escapeHtml(w.name)}</option>`).join(''); });
-    if(!document.getElementById('manualDate').value) document.getElementById('manualDate').value=(new Date()).toISOString().slice(0,10);
-    renderDailySchedule();
-}
-function renderDailySchedule(){
-    const dateStr=document.getElementById('dailyDate').value; if(!dateStr) return;
-    const dateObj=new Date(dateStr); const workerFilter=document.getElementById('dailyWorker').value; const periodFilter=document.getElementById('dailyPeriodFilter').value||'الكل';
-    const tbody=document.querySelector('#dailyScheduleTable tbody'); tbody.innerHTML='';
-    const dayTasks = tasks.filter(t=>t.date===dateStr && (workerFilter? t.worker===workerFilter : true) && (periodFilter==='الكل' || t.period===periodFilter || t.period==='الكل'));
-    const contractMatches=[];
-    dailyContracts.forEach((c,idx)=>{ if(isContractOnDate(c,dateObj,periodFilter) && (!workerFilter || c.worker===workerFilter)){ const existsTask=tasks.some(t=>t.date===dateStr && t.client===c.client && t.worker===c.worker); contractMatches.push({contract:c,contractIndex:idx,contractType:'يومي',existsTask}); } });
-    monthlyContracts.forEach((c,idx)=>{ if(isContractOnDate(c,dateObj,periodFilter) && (!workerFilter || c.worker===workerFilter)){ const existsTask=tasks.some(t=>t.date===dateStr && t.client===c.client && t.worker===c.worker); contractMatches.push({contract:c,contractIndex:idx,contractType:'شهري',existsTask}); } });
-    const manualForDay=manualEntries.map((m,mi)=>({m,mi})).filter(x=>x.m.date===dateStr && (workerFilter? x.m.worker===workerFilter : true) && (periodFilter==='الكل' || x.m.period===periodFilter || x.m.period==='الكل'));
-    const rows=[]; dayTasks.forEach(t=>rows.push({...t,source:t.source||t('source_plan')})); contractMatches.forEach(cm=>{ if(!cm.existsTask){ const pd = getContractPeriodsOnDate(cm.contract, dateObj); const periodLabel = (pd && pd.length===1) ? pd[0] : 'الكل'; rows.push({ date:dateStr, client:cm.contract.client, phone:cm.contract.clientPhone||'', area:cm.contract.clientArea||'', map:cm.contract.clientMapUrl||'', worker:cm.contract.worker, period:periodLabel, notes:cm.contract.notes||'', driver:'', amount:'', paymentStatus:cm.contract.payment||'', paymentMethod:'', hours:'', source:t('source_contract'), contractIndex:cm.contractIndex, contractType:cm.contractType }); } }); manualForDay.forEach(x=>rows.push({...x.m, source:t('source_manual'), _manualIndex:x.mi}));
-    if(rows.length===0){ tbody.innerHTML=`<tr><td colspan="14">${t('no_tasks_on_date')}</td></tr>`; return; }
-    rows.forEach((r,i)=>{ let actions=''; if(r.source===t('source_manual')){ actions=`<button class="btn-edit small-btn" onclick="editManualEntry(${r._manualIndex})">${t('edit')}</button> <button class="btn-danger small-btn" onclick="deleteManualEntry(${r._manualIndex})">${t('delete')}</button>`; } else if(r.source===t('source_plan')){ const tidx=tasks.findIndex(t=>t.date===r.date && t.client===r.client && t.worker===r.worker); if(tidx!==-1){ actions=`<button class="btn-edit small-btn" onclick="editTask(${tidx})">${t('edit')}</button> <button class="btn-danger small-btn" onclick="deleteTask(${tidx})">${t('delete')}</button>`; } } else if(r.source===t('source_contract')){ actions=`<button class="btn-edit small-btn" onclick="planContractOccurrence('${r.contractType}', ${r.contractIndex}, '${r.date}')">${t('add_task_quick')}</button> <button class="btn-edit small-btn" onclick="editContractFromDaily('${r.contractType}', ${r.contractIndex})">${t('edit')}</button>`; } tbody.innerHTML += `<tr><td>${formatDateLocalized(r.date)}</td><td class="client-name">${escapeHtml(r.client)}</td><td>${escapeHtml(r.worker||'-')}</td><td class="period-label">${escapeHtml(r.period||'-')}</td><td>${escapeHtml(r.phone||'-')}</td><td>${escapeHtml(r.area||'-')}</td><td>${escapeHtml(r.driver||'-')}</td><td>${escapeHtml(r.amount||'-')}</td><td>${escapeHtml(r.paymentStatus||'-')}</td><td>${escapeHtml(r.paymentMethod||'-')}</td><td>${escapeHtml(r.hours||'-')}</td><td>${escapeHtml(r.notes||'-')}</td><td>${escapeHtml(r.source)}</td><td>${actions}</td></tr>`; });
-}
-
-/* helper to edit contract from daily row */
-function editContractFromDaily(type, idx){ if(type==='يومي') editDaily(idx); else if(type==='شهري') editMonthly(idx); }
-
-/* ===== Weekly rendering & controls (planning uses daily+monthly contracts only) ===== */
-function updateWeekControls(){ if(!document.getElementById('weekDate').value) document.getElementById('weekDate').value=(new Date()).toISOString().slice(0,10); renderWeeklyTable(); }
-function getWeekStartFromDate(dateObj){ let d=new Date(dateObj); d.setHours(0,0,0,0); while(d.getDay()!==6) d.setDate(d.getDate()-1); return d; }
-function changeWeek(direction){ let current=document.getElementById('weekDate').value; if(!current) current=(new Date()).toISOString().slice(0,10); let d=new Date(current); d.setDate(d.getDate()+direction*7); document.getElementById('weekDate').value=isoDate(d); renderWeeklyTable(); }
-
-function generatePlanFromContracts(){
-    const baseDate=document.getElementById('weekDate').value; if(!baseDate) return alert(t('alert_choose_week_date'));
-    const weekStart=getWeekStartFromDate(new Date(baseDate)); const weekDates=[]; for(let i=0;i<7;i++){ let dt=new Date(weekStart); dt.setDate(weekStart.getDate()+i); weekDates.push(dt); }
-    let created=0;
-    function processArray(arr){ arr.forEach(c=>{ weekDates.forEach(dt=>{ if(isContractOnDate(c,dt)){ const dStr=isoDate(dt); const exists=tasks.some(t=>t.date===dStr && t.client===c.client && t.worker===c.worker); if(!exists){ tasks.push(createTaskFromContract(c,dStr)); created++; } } }); }); }
-    processArray(dailyContracts); processArray(monthlyContracts);
-    if(created>0){ saveData(); renderWeeklyTable(); renderDailySchedule(); renderWeeklyTasksPanel(); }
-    alert(t('alert_created_tasks', created));
-}
-
-function renderWeeklyTable(){
-    const baseDate=document.getElementById('weekDate').value; if(!baseDate) return;
-    const weekStart=getWeekStartFromDate(new Date(baseDate)); const weekDates=[]; for(let i=0;i<7;i++){ let dt=new Date(weekStart); dt.setDate(weekStart.getDate()+i); weekDates.push(dt); }
-    const tbody=document.querySelector('#weeklyTable tbody'); tbody.innerHTML='';
-    workers.forEach(w=>{ ['الصباحية','المسائية'].forEach(period=>{ let row=`<tr><td>${formatDateLocalized(isoDate(weekDates[0]))} - ${formatDateLocalized(isoDate(weekDates[6]))}</td><td>${escapeHtml(w.name)}</td><td class="period-label">${escapeHtml(period)}</td>`; weekDates.forEach(dt=>{ const dStr=isoDate(dt); const tMatches=tasks.filter(t=>t.worker===w.name && t.date===dStr && (period==='الكل' || t.period===period || t.period==='الكل')); let contractMatches=[]; dailyContracts.forEach((c,ci)=>{ if(isContractOnDate(c,dt,period) && c.worker===w.name && !tasks.some(t=>t.date===dStr && t.client===c.client && t.worker===c.worker)) contractMatches.push({c,ci,ct:'يومي'}); }); monthlyContracts.forEach((c,ci)=>{ if(isContractOnDate(c,dt,period) && c.worker===w.name && !tasks.some(t=>t.date===dStr && t.client===c.client && t.worker===c.worker)) contractMatches.push({c,ci,ct:'شهري'}); });
-        let cell=`<div class="cell-scroll">`;
-        tMatches.forEach(tk=>{ cell+=`<div style="background:#fff3cd;color:#2c3e50;padding:6px;border-radius:4px;margin-bottom:6px;">${escapeHtml(tk.client)} — ${tk.driver?('Driver: '+escapeHtml(tk.driver)+' — '):''} ${tk.amount?('Amount: '+escapeHtml(tk.amount)+' — '):''} ${tk.paymentStatus?('('+escapeHtml(tk.paymentStatus)+')'):''}<br><small class="muted">Hours: ${tk.hours||'-'} — ${escapeHtml(tk.notes||'-')}</small><br><button class="btn-edit small-btn" onclick="editTask(${tasks.indexOf(tk)})">${t('edit')}</button> <button class="btn-danger small-btn" onclick="deleteTask(${tasks.indexOf(tk)})">${t('delete')}</button></div>`; });
-        contractMatches.forEach(cm=>{ const ci=cm.ci; const ctype=cm.ct; cell+=`<div style="background:#0b3d4a;color:#fff;padding:6px;border-radius:4px;margin-bottom:6px;">${(lang==='ar' ? 'عقد: ' : 'Contract: ')} ${escapeHtml(cm.c.client)}<br><small class="muted">${escapeHtml(summaryDayPeriods(cm.c))}</small><br><button class="btn-edit small-btn" onclick="planContractOccurrence('${ctype}', ${ci}, '${dStr}')">${t('add_task_quick')}</button> <button class="btn-edit small-btn" onclick="editContractFromDaily('${ctype}', ${ci})">${t('edit')}</button></div>`; });
-        cell+=`</div>`; row+=`<td>${cell}</td>`; }); row+=`</tr>`; tbody.innerHTML+=row; }); });
-    const weekStartDate=weekDates[0], weekEndDate=weekDates[6];
-    const dailyList=dailyContracts.filter(c=>c.type==="يومي" && !(new Date(c.end) < weekStartDate || new Date(c.start) > weekEndDate));
-    const monthlyList=monthlyContracts.filter(c=>c.type==="شهري" && !(new Date(c.end)<weekStartDate || new Date(c.start)>weekEndDate));
-    document.getElementById('weeklyDailyContractsPanel').innerHTML = dailyList.length ? dailyList.map(c=>`<div class="daily-contracts">${formatDateLocalized(c.start)} — ${escapeHtml(c.client)} — ${escapeHtml(c.worker)} — ${escapeHtml(summaryDayPeriods(c))}</div>`).join('') : t('no_items');
-    document.getElementById('weeklyMonthlyContractsPanel').innerHTML = monthlyList.length ? monthlyList.map(c=>`<div class="monthly-contracts">من ${formatDateLocalized(c.start)} إلى ${formatDateLocalized(c.end)} — ${escapeHtml(c.client)} — ${escapeHtml(c.worker)}</div>`).join('') : t('no_items');
-    renderWeeklyTasksPanel();
-}
-
-/* ===== Editable weekly tasks panel with autofill support ===== */
-function renderWeeklyTasksPanel(){
-    const panel=document.getElementById('weeklyTasksPanel'); if(!panel) return;
-    const clientOptions = clients.map(c=>`<option value="${escapeHtml(c.name)}">${escapeHtml(c.name)}</option>`).join('') || `<option value="">-- ${t('no_items')} --</option>`;
-    const workerOptions = workers.map(w=>`<option value="${escapeHtml(w.name)}">${escapeHtml(w.name)}</option>`).join('') || `<option value="">-- ${t('no_items')} --</option>`;
-    let html='';
-    html+=`<div style="margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:8px;"><h4 style="margin:4px 0;color:#ffcc00;">${t('add_task_quick')}</h4><div style="display:flex;gap:8px;flex-wrap:wrap;"><input id="newTask_date" type="date" style="width:120px;"> <select id="newTask_worker" style="width:140px;">${workerOptions}</select> <select id="newTask_period" style="width:120px;"><option value="الكل">الكل</option><option value="الصباحية">الصباحية</option><option value="المسائية">المسائية</option></select> <select id="newTask_client" style="min-width:160px;" onchange="populateNewTaskDetails()">${clientOptions}</select> <input id="newTask_phone" type="text" placeholder="${t('th_client_phone')}" style="width:120px;"> <input id="newTask_area" type="text" placeholder="${t('th_client_area')}" style="min-width:160px;"></div><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px;"><button class="btn-export" onclick="addNewWeeklyTaskFromPanel()">${t('add_task_quick')}</button></div></div>`;
-
-    if(tasks.length === 0){
-        html += `<div class="muted">${t('no_planned_tasks')}</div>`;
-        panel.innerHTML = html;
-        return;
-    }
-
-    tasks.forEach((t, idx) => {
-        const workerOptionsSelected = workerOptions.replace(`>${escapeHtml(t.worker)}<` , ` selected>${escapeHtml(t.worker)}<`);
-        const clientOptionsSelected = clientOptions.replace(`>${escapeHtml(t.client)}<` , ` selected>${escapeHtml(t.client)}<`);
-        html += `<div class="task-row" id="weekly_task_row_${idx}">
-            <label style="font-weight:bold;">#${idx+1} — ${escapeHtml(t.client || (lang==='ar' ? 'بدون اسم' : 'No name'))}</label>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                <input id="weekly_task_date_${idx}" type="date" value="${escapeHtml(t.date)}" style="width:130px;">
-                <select id="weekly_task_worker_${idx}" style="width:140px;">${workerOptionsSelected}</select>
-                <select id="weekly_task_period_${idx}" style="width:120px;"><option value="الكل"${t.period==='الكل'?' selected':''}>الكل</option><option value="الصباحية"${t.period==='الصباحية'?' selected':''}>الصباحية</option><option value="المسائية"${t.period==='المسائية'?' selected':''}>المسائية</option></select>
-                <select id="weekly_task_client_${idx}" style="min-width:160px;">${clientOptionsSelected}</select>
-                <input id="weekly_task_phone_${idx}" type="text" value="${escapeHtml(t.phone||'')}" placeholder="${t('th_client_phone')}" style="width:120px;">
-            </div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
-                <input id="weekly_task_area_${idx}" type="text" value="${escapeHtml(t.area||'')}" placeholder="${t('th_client_area')}" style="min-width:160px;">
-                <input id="weekly_task_driver_${idx}" type="text" value="${escapeHtml(t.driver||'')}" placeholder="Driver" style="width:140px;">
-                <input id="weekly_task_amount_${idx}" type="number" value="${escapeHtml(t.amount||'')}" placeholder="Amount" style="width:120px;">
-                <select id="weekly_task_paymentStatus_${idx}" style="width:140px;"><option value="">--${t('label_payment')}--</option><option value="مدفوع"${t.paymentStatus==='مدفوع'?' selected':''}>مدفوع</option><option value="غير مدفوع"${t.paymentStatus==='غير مدفوع'?' selected':''}>غير مدفوع</option></select>
-                <select id="weekly_task_paymentMethod_${idx}" style="width:140px;"><option value="">--${t('th_ds_method')}--</option><option value="كاش"${t.paymentMethod==='كاش'?' selected':''}>كاش</option><option value="أون لاين"${t.paymentMethod==='أون لاين'?' selected':''}>أون لاين</option><option value="الدوبي كاش"${t.paymentMethod==='الدوبي كاش'?' selected':''}>الدوبي كاش</option><option value="الدوبي أون لاين"${t.paymentMethod==='الدوبي أون لاين'?' selected':''}>الدوبي أون لاين</option></select>
-                <input id="weekly_task_hours_${idx}" type="number" value="${escapeHtml(t.hours||'')}" placeholder="Hours" style="width:120px;">
-            </div>
-            <div style="margin-top:6px;">
-                <textarea id="weekly_task_notes_${idx}" placeholder="${t('label_notes')}" rows="2">${escapeHtml(t.notes||'')}</textarea>
-            </div>
-            <div class="task-actions">
-                <button class="btn-edit" onclick="saveWeeklyTaskEdits(${idx})">${t('save')}</button>
-                <button class="btn-danger" onclick="deleteTask(${idx})">${t('delete')}</button>
-            </div>
-        </div>`;
-    });
-
-    panel.innerHTML = html;
-}
-
-/* populate phone for newTask when client selected in quick-add */
-function populateNewTaskPhone(){
-    const sel = document.getElementById('newTask_client');
-    if(!sel) return;
-    const name = sel.value;
-    const client = clients.find(c => c.name === name);
-    const phoneEl = document.getElementById('newTask_phone');
-    if(client) phoneEl.value = client.phone || '';
-    else phoneEl.value = '';
-}
-
-/* save weekly edits */
-function saveWeeklyTaskEdits(idx){
-    const tsk = tasks[idx];
-    if(!tsk) return alert(t('no_items'));
-    const newDate = document.getElementById(`weekly_task_date_${idx}`).value;
-    const newWorker = document.getElementById(`weekly_task_worker_${idx}`).value;
-    const newPeriod = document.getElementById(`weekly_task_period_${idx}`).value;
-    const newClient = document.getElementById(`weekly_task_client_${idx}`).value;
-    const newPhone = document.getElementById(`weekly_task_phone_${idx}`).value;
-    const newArea = document.getElementById(`weekly_task_area_${idx}`).value;
-    const newDriver = document.getElementById(`weekly_task_driver_${idx}`).value;
-    const newAmount = document.getElementById(`weekly_task_amount_${idx}`).value;
-    const newPaymentStatus = document.getElementById(`weekly_task_paymentStatus_${idx}`).value;
-    const newPaymentMethod = document.getElementById(`weekly_task_paymentMethod_${idx}`).value;
-    const newHours = document.getElementById(`weekly_task_hours_${idx}`).value;
-    const newNotes = document.getElementById(`weekly_task_notes_${idx}`).value;
-    tasks[idx] = { ...tsk, date:newDate, worker:newWorker, period:newPeriod, client:newClient, phone:newPhone, area:newArea, driver:newDriver, amount:newAmount, paymentStatus:newPaymentStatus, paymentMethod:newPaymentMethod, hours:newHours, notes:newNotes };
-    saveData(); renderWeeklyTable(); renderDailySchedule(); renderWeeklyTasksPanel();
-}
-
-/* add new task from panel (reads client select, auto-fills phone if available) */
-function addNewWeeklyTaskFromPanel(){
-    const date = document.getElementById('newTask_date').value;
-    const worker = document.getElementById('newTask_worker').value;
-    const period = document.getElementById('newTask_period').value;
-    const client = document.getElementById('newTask_client').value;
-    const phone = document.getElementById('newTask_phone').value;
-    const area = document.getElementById('newTask_area').value || '';
-    if(!date || !worker || !client) return alert((lang==='ar') ? 'الرجاء إدخال التاريخ والعميل والموظفة على الأقل' : 'Please enter date, client and worker at least');
-    // Check worker availability only for the chosen period
-    if(isWorkerUnavailableOnDate(worker, date, period)){
-        alert(t('alert_worker_unavailable'));
-        return;
-    }
-    const tk = { date:date, worker:worker, period:period||'الكل', client:client, phone:phone||'', area:area||'', map:'', notes:'', driver:'', amount:'', paymentStatus:'', paymentMethod:'', hours:'', source: t('source_plan') };
-    tasks.push(tk); saveData(); renderWeeklyTable(); renderDailySchedule(); renderWeeklyTasksPanel();
-}
-
-/* ===== Persistence ===== */
-function saveData(){
-    localStorage.setItem('cleaningClients', JSON.stringify(clients));
-    localStorage.setItem('cleaningWorkers', JSON.stringify(workers));
-    localStorage.setItem('cleaningContracts_daily', JSON.stringify(dailyContracts));
-    localStorage.setItem('cleaningContracts_monthly', JSON.stringify(monthlyContracts));
-    localStorage.setItem('cleaningManualEntries', JSON.stringify(manualEntries));
-    localStorage.setItem('cleaningTasks', JSON.stringify(tasks));
-    localStorage.setItem('cleaning_lang', lang);
-}
-function loadData(){
-    clients = JSON.parse(localStorage.getItem('cleaningClients')||'[]');
-    workers = JSON.parse(localStorage.getItem('cleaningWorkers')||'[]');
-    dailyContracts = JSON.parse(localStorage.getItem('cleaningContracts_daily')||'[]');
-    monthlyContracts = JSON.parse(localStorage.getItem('cleaningContracts_monthly')||'[]');
-    manualEntries = JSON.parse(localStorage.getItem('cleaningManualEntries')||'[]');
-    tasks = JSON.parse(localStorage.getItem('cleaningTasks')||'[]');
-    lang = localStorage.getItem('cleaning_lang') || lang;
-    setLanguage(lang);
-    renderClients(); renderWorkers(); renderContracts();
-    updateContractFormSelects(); // fills client datalist and selects
-    if(!document.getElementById('dailyDate').value) document.getElementById('dailyDate').value=(new Date()).toISOString().slice(0,10);
-    if(!document.getElementById('weekDate').value) document.getElementById('weekDate').value=(new Date()).toISOString().slice(0,10);
-    updateDailyControls(); updateWeekControls(); updateTopContractPanels();
-}
-window.onload = loadData;
-
-/* ===== Exports ===== */
-function exportAllDataExcel(){
-    let html='<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"></head><body>';
-    html+='<table border="1"><tr><th colspan="4">'+t('clientsHeading')+'</th></tr><tr><th>'+t('th_client_name')+'</th><th>'+t('th_client_phone')+'</th><th>'+t('th_client_area')+'</th><th>'+t('th_client_map')+'</th></tr>';
-    clients.forEach(c=> html+=`<tr><td>${escapeHtml(c.name)}</td><td>${escapeHtml(c.phone)}</td><td>${escapeHtml(c.area)}</td><td>${escapeHtml(c.mapUrl||'')}</td></tr>`);
-    html+='</table><br/>';
-    html+='<table border="1"><tr><th colspan="3">'+t('workersHeading')+'</th></tr><tr><th>'+t('th_worker_name')+'</th><th>'+t('th_worker_phone')+'</th><th>'+t('th_worker_nat')+'</th></tr>';
-    workers.forEach(w=> html+=`<tr><td>${escapeHtml(w.name)}</td><td>${escapeHtml(w.phone)}</td><td>${escapeHtml(w.nationality||'')}</td></tr>`);
-    html+='</table><br/>';
-    html+='<table border="1"><tr><th colspan="12">'+t('dailyContractsTitle')+'</th></tr><tr><th>'+t('th_contract_client')+'</th><th>'+t('th_contract_phone')+'</th><th>'+t('th_contract_area')+'</th><th>'+t('th_contract_map')+'</th><th>'+t('th_contract_worker')+'</th><th>'+t('th_contract_period')+'</th><th>'+t('th_contract_start')+'</th><th>'+t('th_contract_end')+'</th><th>'+t('th_contract_value')+'</th><th>'+t('th_contract_payment')+'</th><th>'+t('th_contract_notes')+'</th></tr>';
-    dailyContracts.forEach(c=> html+=`<tr><td>${escapeHtml(c.client)} ${c.dayPeriods ? ' ('+escapeHtml(summaryDayPeriods(c))+')' : (c.weekdays && c.weekdays.length ? ' ('+escapeHtml(weekdaysToNames(c.weekdays))+')' : '')}</td><td>${escapeHtml(c.clientPhone||'')}</td><td>${escapeHtml(c.clientArea||'')}</td><td>${escapeHtml(c.clientMapUrl||'')}</td><td>${escapeHtml(c.worker)}</td><td>${escapeHtml(c.period||'')}</td><td>${escapeHtml(c.start||'')}</td><td>${escapeHtml(c.end||t('open_ended'))}</td><td>${escapeHtml(c.value||'')}</td><td>${escapeHtml(c.payment||'')}</td><td>${escapeHtml(c.notes||'')}</td></tr>`);
-    html+='</table><br/>';
-    html+='<table border="1"><tr><th colspan="12">'+t('monthlyContractsTitle')+'</th></tr><tr><th>'+t('th_contract_client')+'</th><th>'+t('th_contract_phone')+'</th><th>'+t('th_contract_area')+'</th><th>'+t('th_contract_map')+'</th><th>'+t('th_contract_worker')+'</th><th>'+t('th_contract_period')+'</th><th>'+t('th_contract_start')+'</th><th>'+t('th_contract_end')+'</th><th>'+t('th_contract_value')+'</th><th>'+t('th_contract_payment')+'</th><th>'+t('th_contract_notes')+'</th></tr>';
-    monthlyContracts.forEach(c=> html+=`<tr><td>${escapeHtml(c.client)}</td><td>${escapeHtml(c.clientPhone||'')}</td><td>${escapeHtml(c.clientArea||'')}</td><td>${escapeHtml(c.clientMapUrl||'')}</td><td>${escapeHtml(c.worker)}</td><td>${escapeHtml(c.period||'')}</td><td>${escapeHtml(c.start||'')}</td><td>${escapeHtml(c.end||'')}</td><td>${escapeHtml(c.value||'')}</td><td>${escapeHtml(c.payment||'')}</td><td>${escapeHtml(c.notes||'')}</td></tr>`);
-    html+='</table><br/>';
-    html+='<table border="1"><tr><th colspan="11">'+t('manualEntryTitle')+'</th></tr><tr><th>'+t('th_ds_date')+'</th><th>'+t('th_ds_worker')+'</th><th>'+t('th_ds_period')+'</th><th>'+t('th_ds_client')+'</th><th>'+t('th_ds_phone')+'</th><th>'+t('th_ds_area')+'</th><th>'+t('th_ds_driver')+'</th><th>'+t('th_ds_amount')+'</th><th>'+t('th_ds_status')+'</th><th>'+t('th_ds_method')+'</th><th>'+t('th_ds_hours')+'</th></tr>';
-    manualEntries.forEach(m=> html+=`<tr><td>${escapeHtml(m.date)}</td><td>${escapeHtml(m.worker)}</td><td>${escapeHtml(m.period)}</td><td>${escapeHtml(m.client)}</td><td>${escapeHtml(m.phone||'')}</td><td>${escapeHtml(m.area||'')}</td><td>${escapeHtml(m.driver||'')}</td><td>${escapeHtml(m.amount||'')}</td><td>${escapeHtml(m.paymentStatus||'')}</td><td>${escapeHtml(m.paymentMethod||'')}</td><td>${escapeHtml(m.hours||'')}</td></tr>`);
-    html+='</table><br/>';
-    html+='<table border="1"><tr><th colspan="12">'+t('sidebar_weekly_tasks_title')+'</th></tr><tr><th>'+t('th_ds_date')+'</th><th>'+t('th_ds_worker')+'</th><th>'+t('th_ds_period')+'</th><th>'+t('th_ds_client')+'</th><th>'+t('th_ds_phone')+'</th><th>'+t('th_ds_area')+'</th><th>'+t('th_ds_driver')+'</th><th>'+t('th_ds_amount')+'</th><th>'+t('th_ds_status')+'</th><th>'+t('th_ds_method')+'</th><th>'+t('th_ds_hours')+'</th><th>'+t('th_ds_notes')+'</th></tr>';
-    tasks.forEach(tk=> html+=`<tr><td>${escapeHtml(tk.date)}</td><td>${escapeHtml(tk.worker)}</td><td>${escapeHtml(tk.period||'')}</td><td>${escapeHtml(tk.client)}</td><td>${escapeHtml(tk.phone||'')}</td><td>${escapeHtml(tk.area||'')}</td><td>${escapeHtml(tk.driver||'')}</td><td>${escapeHtml(tk.amount||'')}</td><td>${escapeHtml(tk.paymentStatus||'')}</td><td>${escapeHtml(tk.paymentMethod||'')}</td><td>${escapeHtml(tk.hours||'')}</td><td>${escapeHtml(tk.notes||'')}</td></tr>`);
-    html+='</table></body></html>';
-    const blob=new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
-    const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=t('export_filename'); a.click(); URL.revokeObjectURL(url);
-}
-function tableToExcel(tableId, filename=''){ let table=document.getElementById(tableId); let html='<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"></head><body>'+table.outerHTML+'</body></html>'; let blob=new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8;' }); let url=URL.createObjectURL(blob); let a=document.createElement('a'); a.href=url; a.download=(filename?filename+'.xls':'export.xls'); a.click(); URL.revokeObjectURL(url); }
-function exportClientsToExcel(){ tableToExcel('clientsTable', t('clientsHeading')); } function exportWorkersToExcel(){ tableToExcel('workersTable', t('workersHeading')); } function exportContractsToExcel(){ exportAllDataExcel(); } function exportWeeklyTableToExcel(){ tableToExcel('weeklyTable', 'weekly_plan'); }
-</script>
-</body>
-</html>
-</script>
+  <script src="script.js"></script>
 </body>
 </html>

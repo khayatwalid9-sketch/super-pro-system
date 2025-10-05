@@ -1,0 +1,66 @@
+/* أساسي */
+@font-face { font-family: 'TNRArabicFallback'; src: local('Times New Roman'); }
+:root{ --gold:#ffcc00; --silver:#cfcfcf; --bg:#0b1416; --panel:#0e2b3a; --accent:#063544; }
+*{ box-sizing:border-box; font-family:'TNRArabicFallback', 'Times New Roman', serif; }
+html,body{ height:100%; margin:0; background:var(--bg) url('background.jpg') center top / cover no-repeat fixed; color:#fff; direction:rtl; }
+.page-overlay{ position:fixed; inset:0; background:linear-gradient(rgba(6,14,18,0.62), rgba(6,14,18,0.78)); z-index:0; pointer-events:none; }
+.container{ width:95%; max-width:1200px; margin:20px auto; position:relative; z-index:1; }
+
+/* ترويسة */
+.topbar{ display:flex; align-items:center; justify-content:space-between; background:transparent; padding:8px 12px; margin-bottom:14px; }
+.branding{ display:flex; align-items:center; gap:12px; }
+.logo{ width:62px; height:62px; object-fit:contain; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.5); }
+.brand-name{ color:var(--gold); font-size:22px; font-weight:700; letter-spacing:0.5px; }
+.brand-sub{ color:var(--silver); font-size:12px; margin-top:2px; }
+
+/* زر تسجيل دخول */
+.top-nav{ display:flex; align-items:center; gap:12px; }
+.login-btn{ background:linear-gradient(90deg,var(--gold),#e6b800); color:#05171b; border:none; padding:8px 12px; border-radius:8px; font-weight:700; cursor:pointer; }
+
+/* زر الروابط العلوية */
+.nav-link{ color:var(--gold); text-decoration:none; margin-left:8px; cursor:pointer; }
+
+/* hero grid */
+.hero{ padding:18px 0; }
+.buttons-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.grid-btn{ background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04); padding:18px; border-radius:10px; color:var(--gold); display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; }
+.grid-btn .icon{ font-size:20px; }
+.grid-btn .label{ font-size:14px; font-weight:600; color:var(--gold); }
+
+/* navigation */
+.main-nav{ display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
+.nav-btn{ background:transparent; color:var(--silver); border:1px solid rgba(255,255,255,0.03); padding:8px 12px; border-radius:8px; cursor:pointer; }
+.nav-btn.active{ background:var(--gold); color:#05171b; border-color:transparent; }
+
+/* لوحات ومحتوى */
+.panel{ background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:14px; border-radius:10px; margin-bottom:12px; border:1px solid rgba(255,255,255,0.03); }
+.contracts-box{ margin-top:10px; }
+.contracts-subtabs{ display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
+.contracts-subtab{ background:var(--accent); color:#fff; padding:8px 10px; border-radius:8px; cursor:pointer; }
+.contracts-subtab.active{ background:var(--gold); color:#05171b; }
+
+/* جداول */
+.data-table{ width:100%; border-collapse:collapse; margin-top:10px; }
+.data-table th, .data-table td{ border:1px solid rgba(255,255,255,0.04); padding:8px; text-align:center; font-size:13px; color:var(--silver); }
+.data-table th{ background:rgba(255,255,255,0.02); color:var(--gold); }
+
+/* نماذج */
+.form-group{ margin-bottom:10px; }
+label{ display:block; margin-bottom:6px; color:var(--gold); font-weight:600; font-size:13px; }
+input[type="text"], input[type="tel"], input[type="url"], input[type="date"], select, textarea, input[type="number"]{ width:100%; padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.06); background:#fff; color:#000; font-family:'TNRArabicFallback','Times New Roman',serif; }
+.form-btn{ background:var(--gold); color:#05171b; padding:10px; border:none; border-radius:8px; font-weight:700; cursor:pointer; }
+.form-btn.cancel{ background:#666; color:#fff; }
+
+/* أزرار تصدير وتحرير */
+.btn-export{ background:#009688; color:#fff; padding:8px 10px; border-radius:6px; border:none; cursor:pointer; }
+.btn-edit{ background:#27ae60; color:#fff; border:none; padding:6px 8px; border-radius:5px; cursor:pointer; }
+.btn-danger{ background:#e74c3c; color:#fff; border:none; padding:6px 8px; border-radius:5px; cursor:pointer; }
+
+/* sidebar و layout */
+.layout-flex{ display:flex; gap:20px; align-items:flex-start; }
+.main-area{ flex:1; }
+.sidebar{ width:360px; background:rgba(255,255,255,0.02); padding:12px; border-radius:8px; max-height:760px; overflow:auto; }
+
+/* responsive */
+@media (max-width:980px){ .buttons-grid{ grid-template-columns:repeat(2,1fr); } .sidebar{ width:100%; } .layout-flex{ flex-direction:column; } }
+@media (max-width:640px){ .buttons-grid{ grid-template-columns:1fr; } .brand-name{ font-size:18px; } }
